@@ -1,0 +1,32 @@
+### Create
+POST localhost:8080/region
+Content-Type: application/json
+Authorization: eyJhbCciOiJIUzUxMiJ9.eyJpYXQiOjE3MDYyNzgzOTcsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDYzNjQ3OTcsImlzcyI6Ikt1blV6VGVzdCJ9.GESWI2fxT3ZUcz4yYXXICjhiUMBEX_VJZ97Gy7HoT5WBlNwmbKtGdbdT_faAiTDy5ejLPiVZCRKogv_5_k7yyw
+
+
+{
+  "order_number": 2,
+  "nameUz": "Toshkent",
+  "nameEn": "Tashkent",
+  "nameRu": "Ташкент"
+}
+
+### Update
+PUT localhost:8080/region/1
+Content-Type: application/json
+
+{
+  "order_number": 3,
+  "nameUz": "O`zbekiston",
+  "nameRu": "Узбекистон",
+  "nameEn": "Uzbekistan"
+}
+
+### Delete
+GET localhost:8080/region/delete/2
+
+### Get all
+GET localhost:8080/region
+
+### Get by lan
+GET localhost:8080/region/geByLan?lan=ru

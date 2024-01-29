@@ -1,0 +1,59 @@
+### Create user
+POST localhost:8080/profile
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDYzOTA5MTQsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY0NzczMTQsImlzcyI6Ikt1blV6VGVzdCJ9.xCciy54sBIv35jDVcB9y2Mmo3NZNecCp5Jed67KqtdWpRtYoyCP0g0FYQsxSPKKGW1fwjzN16qgwEBGhbbturg
+
+{
+  "name": "Ali",
+  "surname": "Aliyev",
+  "phone": "998911213444",
+  "password": "0990",
+  "email": "user22@icloud.com",
+  "status": "ACTIVE",
+  "role": "PUBLISHER"
+}
+
+### Update profiel admin
+PUT localhost:8080/profile/3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MDY1NDEsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY1OTI5NDEsImlzcyI6Ikt1blV6VGVzdCJ9.1QCpjHFvzM6Zp-RfLUEVDl1zHzcx5J6bR9smsRYxadlrMYuw5qjkvO7CW6bF5-5QBaY8esQZw5yNjApp6_I6ng
+
+{
+  "name": "Vali",
+  "surname": "Valiyev",
+  "phone": "998912344444",
+  "password": "8888",
+  "email": "valisf@icloud.com",
+  "status": "BLOCK",
+  "role": "USER"
+}
+### Update profile any
+PUT localhost:8080/profile/any/2
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MDY1NDEsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY1OTI5NDEsImlzcyI6Ikt1blV6VGVzdCJ9.1QCpjHFvzM6Zp-RfLUEVDl1zHzcx5J6bR9smsRYxadlrMYuw5qjkvO7CW6bF5-5QBaY8esQZw5yNjApp6_I6ng
+
+{
+  "name": "Joni",
+  "surname": "Joniyev",
+  "phone": "998332314554",
+  "password": "0000",
+  "email": "joni@icloud.com",
+  "status": "ACTIVE",
+  "role": "MODERATOR"
+}
+
+### Pagination
+GET localhost:8080/profile/pagination?page=1&size=3
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MDY1NDEsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY1OTI5NDEsImlzcyI6Ikt1blV6VGVzdCJ9.1QCpjHFvzM6Zp-RfLUEVDl1zHzcx5J6bR9smsRYxadlrMYuw5qjkvO7CW6bF5-5QBaY8esQZw5yNjApp6_I6ng
+
+### delete by id
+DELETE localhost:8080/profile/2
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MDY1NDEsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY1OTI5NDEsImlzcyI6Ikt1blV6VGVzdCJ9.1QCpjHFvzM6Zp-RfLUEVDl1zHzcx5J6bR9smsRYxadlrMYuw5qjkvO7CW6bF5-5QBaY8esQZw5yNjApp6_I6ng
+
+### filter
+POST localhost:8080/profile/filter
+Content-Type: application/json
+
+{
+  "surname": "ev"
+}

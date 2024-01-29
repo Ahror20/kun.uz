@@ -1,0 +1,10 @@
+### Login admin
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+
+{
+  "email": "admin@mail.ru",
+  "password": "12345"
+
+}
