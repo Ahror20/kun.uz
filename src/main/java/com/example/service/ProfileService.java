@@ -1,11 +1,9 @@
 package com.example.service;
 
-import com.example.dto.PaginationResultDTO;
-import com.example.dto.ProfileCRUDDTO;
-import com.example.dto.ProfileDTO;
-import com.example.dto.ProfileFilterDTO;
+import com.example.dto.*;
 import com.example.entity.ProfileEntity;
 import com.example.enums.ProfileRole;
+import com.example.enums.ProfileStatus;
 import com.example.exp.AppBadException;
 import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
@@ -194,4 +192,5 @@ public class ProfileService {
         return new PageImpl<>(dtoList, paging, paginationResult.getTotalSize());
 
     }
+
 }

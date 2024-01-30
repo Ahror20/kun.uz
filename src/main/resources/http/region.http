@@ -1,32 +1,38 @@
 ### Create
-POST localhost:8080/region
+POST localhost:8080/region/adm
 Content-Type: application/json
-Authorization: eyJhbCciOiJIUzUxMiJ9.eyJpYXQiOjE3MDYyNzgzOTcsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDYzNjQ3OTcsImlzcyI6Ikt1blV6VGVzdCJ9.GESWI2fxT3ZUcz4yYXXICjhiUMBEX_VJZ97Gy7HoT5WBlNwmbKtGdbdT_faAiTDy5ejLPiVZCRKogv_5_k7yyw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MjcyNjcsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY2MTM2NjcsImlzcyI6Ikt1blV6VGVzdCJ9.XiUUpJa_suJ7vta7QZJMDmXxpHvpZdZ8u0_D5JSNhenzLWQGpiLHxwWVSCnQ3-Cr4NQOnHjaDBh2wThoziP57g
+
+{
+  "order_number": 3,
+  "nameUz": "Navoi",
+  "nameEn": "Navoi",
+  "nameRu": "Navoi"
+}
+
+### Update
+PUT localhost:8080/region/adm/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MjA1NjYsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY2MDY5NjYsImlzcyI6Ikt1blV6VGVzdCJ9.jLFKaIoTtMDowL7byfUTtO6533bmJ0UEdEOrSFjYRF--grct7MQbFNqVEuaEr0S2zYvtiuT3bV0Vv9tV5F1gzQ
+
 
 
 {
   "order_number": 2,
-  "nameUz": "Toshkent",
-  "nameEn": "Tashkent",
-  "nameRu": "Ташкент"
-}
-
-### Update
-PUT localhost:8080/region/1
-Content-Type: application/json
-
-{
-  "order_number": 3,
   "nameUz": "O`zbekiston",
   "nameRu": "Узбекистон",
   "nameEn": "Uzbekistan"
 }
 
 ### Delete
-GET localhost:8080/region/delete/2
+DELETE localhost:8080/region/adm/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MjA1NjYsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY2MDY5NjYsImlzcyI6Ikt1blV6VGVzdCJ9.jLFKaIoTtMDowL7byfUTtO6533bmJ0UEdEOrSFjYRF--grct7MQbFNqVEuaEr0S2zYvtiuT3bV0Vv9tV5F1gzQ"
+
 
 ### Get all
-GET localhost:8080/region
+GET localhost:8080/region/adm
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MjA1NjYsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY2MDY5NjYsImlzcyI6Ikt1blV6VGVzdCJ9.jLFKaIoTtMDowL7byfUTtO6533bmJ0UEdEOrSFjYRF--grct7MQbFNqVEuaEr0S2zYvtiuT3bV0Vv9tV5F1gzQ"
+
 
 ### Get by lan
 GET localhost:8080/region/geByLan?lan=ru

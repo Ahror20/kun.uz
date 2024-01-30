@@ -1,5 +1,7 @@
 package com.example.dto;
 
+import com.example.entity.ProfileEntity;
+import com.example.enums.ProfileStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,14 +11,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ArticleTypeDTO {
+public class EmailSendHistoryDTO {
     private Integer id;
-    private Integer order_number;
-    private String nameUz;
-    private String nameRu;
-    private String nameEn;
-    private String name;
-    private Boolean visible;
-    private LocalDateTime updatedDate;
+    private String message;
+    private String email;
+    private ProfileEntity profile;
     private LocalDateTime createdDate;
+    private ProfileStatus status;
 }

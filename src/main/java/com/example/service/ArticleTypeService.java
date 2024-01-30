@@ -1,7 +1,10 @@
 package com.example.service;
 
 import com.example.dto.ArticleTypeDTO;
+import com.example.dto.RegionDTO;
 import com.example.entity.ArticleTypeEntity;
+import com.example.entity.RegionEntity;
+import com.example.enums.AppLanguage;
 import com.example.exp.AppBadException;
 import com.example.repository.ArticleTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +18,10 @@ import java.util.*;
 public class ArticleTypeService {
     @Autowired
     private ArticleTypeRepository articleTypeRepository;
+
     public ArticleTypeDTO create(ArticleTypeDTO dto) {
         Optional<ArticleTypeEntity> optional = articleTypeRepository.findByOrderNumber(dto.getOrder_number());
-        if (optional.isPresent()){
+        if (optional.isPresent()) {
             throw new AppBadException("There is an article type with such order number");
         }
         ArticleTypeEntity entity = new ArticleTypeEntity();
@@ -34,37 +38,39 @@ public class ArticleTypeService {
         return dto;
 
     }
-    public boolean update(Integer id ,ArticleTypeDTO dto){
+
+    public boolean update(Integer id, ArticleTypeDTO dto) {
         Optional<ArticleTypeEntity> optionalById = articleTypeRepository.findById(id);
-        if (optionalById.isEmpty()){
+        if (optionalById.isEmpty()) {
             throw new AppBadException("Article type with this ID was not found");
         }
 
         Optional<ArticleTypeEntity> optional = articleTypeRepository.findByOrderNumber(dto.getOrder_number());
-        if (optional.isPresent()){
+        if (optional.isPresent()) {
             throw new AppBadException("There is an article type with such order number");
         }
 
         dto.setUpdatedDate(LocalDateTime.now());
 
-        int result = articleTypeRepository.updateArticleType(dto.getOrder_number(), dto.getNameUz(),dto.getNameRu(),dto.getNameEn(),dto.getUpdatedDate(),id);
-        if (result == 1){
-           return true;
+        int result = articleTypeRepository.updateArticleType(dto.getOrder_number(), dto.getNameUz(), dto.getNameRu(), dto.getNameEn(), dto.getUpdatedDate(), id);
+        if (result == 1) {
+            return true;
         }
         throw new AppBadException("each fields is wrong");
     }
 
     public Boolean delete(Integer id) {
         Optional<ArticleTypeEntity> optionalById = articleTypeRepository.findById(id);
-        if (optionalById.isEmpty()){
+        if (optionalById.isEmpty()) {
             throw new AppBadException("Article type with this ID was not found");
         }
-        int result  = articleTypeRepository.delete(id);
-        if (result == 1){
+        int result = articleTypeRepository.delete(id);
+        if (result == 1) {
             return true;
         }
         throw new AppBadException("each fields is wrong");
     }
+
     public PageImpl<ArticleTypeDTO> pagination(Integer page, Integer size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
         Pageable paging = PageRequest.of(page - 1, size, sort);
@@ -83,41 +89,36 @@ public class ArticleTypeService {
     }
 
     private ArticleTypeDTO toDTO(ArticleTypeEntity entity) {
+        ArticleTypeDTO dto = new ArticleTypeDTO();
+        dto.setId(entity.getId());
+        dto.setOrder_number(entity.getOrderNumber());
+        dto.setNameEn(entity.getNameEn());
+        dto.setNameRu(entity.getNameRu());
+        dto.setNameUz(entity.getNameUz());
+        dto.setVisible(entity.getVisible());
+        dto.setUpdatedDate(entity.getUpdatedDate());
+        dto.setCreatedDate(entity.getCreatedDate());
+        return dto;
+    }
+
+    public List<ArticleTypeDTO> getByLan(AppLanguage language) {
+        List<ArticleTypeDTO> dtoList = new LinkedList<>();
+        Iterable<ArticleTypeEntity> all = articleTypeRepository.findAll();
+
+        for (ArticleTypeEntity entity : all) {
             ArticleTypeDTO dto = new ArticleTypeDTO();
             dto.setId(entity.getId());
-            dto.setOrder_number(entity.getOrderNumber());
-            dto.setNameEn(entity.getNameEn());
-            dto.setNameRu(entity.getNameRu());
-            dto.setNameUz(entity.getNameUz());
-            dto.setVisible(entity.getVisible());
-            dto.setUpdatedDate(entity.getUpdatedDate());
-            dto.setCreatedDate(entity.getCreatedDate());
-            return dto;
+            switch (language) {
+                case uz -> dto.setName(entity.getNameUz());
+                case ru -> dto.setName(entity.getNameRu());
+                default -> dto.setName(entity.getNameEn());
+            }
+            ;
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
-
-    public Map<Integer, String> getByLan(Integer id,String lan) {
-        if (!(lan.equalsIgnoreCase("uz") || lan.equalsIgnoreCase("ru") || lan.equalsIgnoreCase("eng"))){
-            throw new AppBadException("The language format was incorrectly selected");
-        }
-        List<ArticleTypeEntity> articleTypeList = articleTypeRepository.findAll();
-        Map<Integer,String> nameList = new HashMap<>();
-        for (ArticleTypeEntity entity: articleTypeList){
-            if (lan.equalsIgnoreCase("uz")){
-                nameList.put(entity.getId(), entity.getNameUz());
-            }
-        }
-        for (ArticleTypeEntity entity: articleTypeList){
-            if (lan.equalsIgnoreCase("ru")){
-                nameList.put(entity.getId(), entity.getNameRu());
-            }
-        }
-        for (ArticleTypeEntity entity: articleTypeList){
-            if (lan.equalsIgnoreCase("eng")){
-                nameList.put(entity.getId(), entity.getNameEn());
-            }
-        }
-        return nameList;
-    }
-
-
 }
+
+
+

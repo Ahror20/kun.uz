@@ -1,16 +1,16 @@
-### Create user
+### Create profile admin
 POST localhost:8080/profile
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDYzOTA5MTQsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY0NzczMTQsImlzcyI6Ikt1blV6VGVzdCJ9.xCciy54sBIv35jDVcB9y2Mmo3NZNecCp5Jed67KqtdWpRtYoyCP0g0FYQsxSPKKGW1fwjzN16qgwEBGhbbturg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MjcyNjcsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY2MTM2NjcsImlzcyI6Ikt1blV6VGVzdCJ9.XiUUpJa_suJ7vta7QZJMDmXxpHvpZdZ8u0_D5JSNhenzLWQGpiLHxwWVSCnQ3-Cr4NQOnHjaDBh2wThoziP57g
 
 {
-  "name": "Ali",
-  "surname": "Aliyev",
-  "phone": "998911213444",
-  "password": "0990",
-  "email": "user22@icloud.com",
+  "name": "ZZZ",
+  "surname": "ZZZ",
+  "phone": "998992345678",
+  "password": "1111",
+  "email": "21kd22@icloud.com",
   "status": "ACTIVE",
-  "role": "PUBLISHER"
+  "role": "MODERATOR"
 }
 
 ### Update profiel admin

@@ -1,4 +1,34 @@
 package com.example.repository;
 
-public interface CategoryRepository {
+import com.example.entity.CategoryEntity;
+import com.example.entity.RegionEntity;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+public interface CategoryRepository extends CrudRepository<CategoryEntity,Integer> {
+    Optional<CategoryEntity> findByOrderNumber(Integer orderNumber);
+
+    @Transactional
+    @Modifying
+    @Query("update CategoryEntity set orderNumber = :orderNumber, nameUz = :name_uz, nameEn = :name_en , nameRu = :name_ru, updatedDate =:updatedDate where id = :id")
+    int updateCategory(@Param("orderNumber") Integer orderNumber,
+                        @Param("name_uz") String name_uz,
+                        @Param("name_ru") String name_ru,
+                        @Param("name_en") String name_en,
+                        @Param("updatedDate")LocalDateTime updatedDate,
+                        @Param("id") Integer id);
+
+    @Transactional
+    @Modifying
+    @Query("update CategoryEntity set visible = false where id =:id")
+    int delete(@Param("id") Integer id);
+
+    List<CategoryEntity> findAll();
 }

@@ -8,3 +8,18 @@ Content-Type: application/json
   "password": "12345"
 
 }
+
+### registration
+POST localhost:8080/auth/registration
+Content-Type: application/json
+
+{
+  "name": "Ahror",
+  "surname": "Orzimurodov",
+  "password": "12223",
+  "email": "samandarov_m@icloud.com",
+  "phone": "998934693533"
+}
+
+### verifivation
+GET http://localhost:8080/auth/verification/email/eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY2MTg0NTEsImlkIjoyNiwiZXhwIjoxNzA2NjIyMDUxLCJpc3MiOiJLdW5VelRlc3QifQ.oda0pXx0aGL1cmbpWTs_LzUwDz8NDw2dpgogoa2hlMXkZhmPrvsc5YD_ac1kOsEfvTtrKnzNWGNOcbXjQpF-4Q
