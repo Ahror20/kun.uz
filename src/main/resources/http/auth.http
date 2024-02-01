@@ -14,10 +14,10 @@ POST localhost:8080/auth/registration
 Content-Type: application/json
 
 {
-  "name": "Ahror",
-  "surname": "Orzimurodov",
+  "name": "Test",
+  "surname": "Testt",
   "password": "12223",
-  "email": "samandarov_m@icloud.com",
+  "email": "jsdgjsddgs@gamil.com",
   "phone": "998934693533"
 }
 
