@@ -24,4 +24,5 @@ public interface EmailSendHistoryRepository extends CrudRepository<EmailSendHist
 
 
 
+
 }

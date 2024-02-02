@@ -1,0 +1,9 @@
+### Get by phone
+GET localhost:8080/sms_history/byPhone/+998931733222
+
+###Get by given date
+GET localhost:8080/sms_history/byDate?date=2024-02-02
+
+### pagination
+GET localhost:8080/sms_history/adm/pagination
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY4MjA1MDAsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA2OTA2OTAwLCJpc3MiOiJLdW5VelRlc3QifQ.-8UYeBDrdhyEgyJ7YMzzzMnZB4M_4XQvnctd_SFxFDJ_AZ4FGfLPjhusFKksApRQiYJ4cGtsQuTxEiFDoyfpTA

@@ -49,7 +49,6 @@ public class RegionController {
     @GetMapping("/geByLan")
     public ResponseEntity<List<RegionDTO>> getByLan(@RequestParam(value = "lan",defaultValue = "uz") AppLanguage lan){
         return ResponseEntity.ok(regionService.getByLan(lan));
-
     }
 
 }

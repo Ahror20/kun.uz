@@ -3,11 +3,15 @@ package com.example.service;
 import com.example.dto.*;
 import com.example.entity.EmailSendHistoryEntity;
 import com.example.entity.ProfileEntity;
+import com.example.entity.SmsHistoryEntity;
 import com.example.enums.ProfileRole;
 import com.example.enums.ProfileStatus;
+import com.example.enums.SmsStatus;
 import com.example.exp.AppBadException;
 import com.example.repository.EmailSendHistoryRepository;
 import com.example.repository.ProfileRepository;
+import com.example.repository.SmsHistoryRepository;
+import com.example.repository.SmsServerRepository;
 import com.example.util.JWTUtil;
 import com.example.util.MDUtil;
 import com.example.util.RandomUtil;
@@ -30,8 +34,13 @@ public class AuthService {
     private EmailSendHistoryRepository emailSendHistoryRepository;
     @Autowired
     private SmsServerService smsServerService;
+    @Autowired
+    private SmsHistoryRepository smsHistoryRepository;
+    @Autowired
+    private SmsHistoryService smsHistoryService;
+
     private String text;
-    private int countSms = 0;
+
 
 
 
@@ -61,38 +70,39 @@ public class AuthService {
         if (dto.getName().length() < 2 || dto.getSurname().length() < 2) {
             throw new AppBadException("name or surname is wrong");
         }
-        if (dto.getPhone().length() != 12) {
-            throw new AppBadException("phone is not correct");
+        if (dto.getPhone().length()!=13){
+            throw new AppBadException("phone number is wrong");
         }
-//        // check
+        // check
 //        Optional<ProfileEntity> optional = profileRepository.findByEmail(dto.getEmail());
 //        if (optional.isPresent()) {
+//            LocalDateTime from = LocalDateTime.now().minusMinutes(1);
+//            LocalDateTime to = LocalDateTime.now();
+//            if (emailSendHistoryRepository.countSendEmail(dto.getEmail(), from, to) >= 3) {
+//                throw new AppBadException("To many attempt. Please try after 1 minute.");
+//            }
 //            if (optional.get().getStatus().equals(ProfileStatus.REGISTRATION)) {
-//                Optional<EmailSendHistoryEntity> emailSendHistoryEntity = emailSendHistoryRepository.findTop1ByEmailOrderByCreatedDateDesc(dto.getEmail());
-//                if (emailSendHistoryEntity.isPresent()) {
-//                    LocalDateTime createdDate = emailSendHistoryEntity.get().getCreatedDate();
-//                    if (countSms < 4 || LocalDateTime.now().isAfter(createdDate.plusMinutes(1))) {
-//                        if (countSms == 4 && LocalDateTime.now().isAfter(createdDate.plusMinutes(1))) {
-//                            countSms = 0;
-//                        }
-//                        sendEmailMessage(dto, optional.get());
-//                        return true;
-//                    }
-//                    throw new AppBadException("You have reached the limit of sending sms. Try again 1 min later");
-//                }
-//                sendEmailMessage(dto, optional.get());
+//               sendEmailMessage(dto, optional.get());
 //                return true;
 //            } else {
 //                throw new AppBadException("Email exists");
 //            }
-//        }
-//
-//        LocalDateTime from = LocalDateTime.now().minusMinutes(1);
-//        LocalDateTime to = LocalDateTime.now();
-//
-//        if (emailSendHistoryRepository.countSendEmail(dto.getEmail(), from, to) >= 3) {
-//            throw new AppBadException("To many attempt. Please try after 1 minute.");
-//        }
+     //   }
+         Optional<ProfileEntity> optionalPhone = profileRepository.findByPhone(dto.getPhone());
+        if (optionalPhone.isPresent()){
+            if (optionalPhone.get().getStatus().equals(ProfileStatus.REGISTRATION)){
+                LocalDateTime from = LocalDateTime.now().minusMinutes(1);
+                LocalDateTime to = LocalDateTime.now();
+                if (smsHistoryRepository.countSendPhone(dto.getPhone(), from, to) >= 2) {
+                    throw new AppBadException("To many attempt. Please try after 1 minute.");
+                }
+                sendSms(dto);
+            }
+            else {
+                throw new AppBadException("phone exists");
+            }
+        }
+
         // create
         ProfileEntity entity = new ProfileEntity();
         entity.setName(dto.getName());
@@ -105,18 +115,41 @@ public class AuthService {
         profileRepository.save(entity);
         //send verification code (email/sms)
 
-        String code = RandomUtil.getRandomSmsCode();
-        smsServerService.send(dto.getPhone(),"Kun.uz Test verification code: ", code);
-//
-//        sendEmailMessage(dto, entity);
-        return true;
+        //sms history
+        sendSms(dto);
+        //gmail
+      //  sendEmailMessage(dto, entity);
+         return true;
+    }
 
+    private void sendSms(RegistrationDTO dto) {
+        String code = RandomUtil.getRandomSmsCode();
+        smsServerService.send(dto.getPhone(),"Tasdiqlash kodi: \n", code);
+
+
+
+        SmsHistoryEntity smsHistoryEntity = new SmsHistoryEntity();
+        smsHistoryEntity.setMessage(code);
+        smsHistoryEntity.setStatus(SmsStatus.NEW);
+        smsHistoryEntity.setPhone(dto.getPhone());
+        smsHistoryEntity.setCreatedDate(LocalDateTime.now());
+        smsHistoryRepository.save(smsHistoryEntity);
     }
 
     private void sendEmailMessage(RegistrationDTO dto, ProfileEntity entity) {
-        String jwt = JWTUtil.encodeForEmail(entity.getId());
-        text = "Hello. \n To complete registration please link to the following link\n"
-                + "http://localhost:8080/auth/verification/email/" + jwt;
+         String jwt = JWTUtil.encodeForEmail(entity.getId());
+         text = "<h1 style=\"text-align: center\">Hello %s</h1>\n" +
+                "<p style=\"background-color: indianred; color: white; padding: 30px\">To complete registration please link to the following link</p>\n" +
+                "<a style=\" background-color: #f44336;\n" +
+                "  color: white;\n" +
+                "  padding: 14px 25px;\n" +
+                "  text-align: center;\n" +
+                "  text-decoration: none;\n" +
+                "  display: inline-block;\" href=\"http://localhost:8080/auth/verification/email/%s\n" +
+                "\">Click</a>\n" +
+                "<br>\n";
+        text = String.format(text, entity.getName(), jwt);
+        mailSender.sendEmail(dto.getEmail(), "Complete registration", text);
 
         EmailSendHistoryDTO emailSendHistoryDTO = new EmailSendHistoryDTO();
         emailSendHistoryDTO.setMessage(text);
@@ -125,11 +158,11 @@ public class AuthService {
         emailSendHistoryDTO.setStatus(entity.getStatus());
         emailSendHistoryService.saveEmailHistory(emailSendHistoryDTO);
 
-        boolean isSending = mailSender.sendEmail(dto.getEmail(), "Complete registration", text);
-        if (isSending) {
-            countSms++;
-        }
     }
+
+
+
+
     public String emailVerification(String jwt) {
         try {
             JwtDTO jwtDTO = JWTUtil.decode(jwt);
@@ -157,6 +190,82 @@ public class AuthService {
         }
         return "success";
     }
+    public String smsVerification(String code) {
+        try {
+            Optional<SmsHistoryEntity> optional = smsHistoryRepository.findByMessage(code);
+            if (optional.isEmpty()) {
+                throw new AppBadException("code is wrong");
+            }
+            Optional<ProfileEntity> entity = profileRepository.findByPhone(optional.get().getPhone());
+            if (!entity.get().getStatus().equals(ProfileStatus.REGISTRATION)) {
+                throw new AppBadException("Profile in wrong status");
+            }
+            int effectRows = profileRepository.updateStatus(entity.get().getId(), ProfileStatus.ACTIVE);
+            if (effectRows == 1) {
+                smsHistoryRepository.updateStatus(optional.get().getId(),SmsStatus.USED,LocalDateTime.now());
+            }
+
+        } catch (JwtException e) {
+            e.printStackTrace();
+            throw new AppBadException("Please tyre again.");
+        }
+        return "success";
+    }
 
 
+    public String resentEmail(String email) {
+        Optional<ProfileEntity> optional = profileRepository.findByEmail(email);
+        if (optional.isEmpty()){
+            throw new AppBadException("You are not registered. Please register first! ");
+        }
+        if (!optional.get().getStatus().equals(ProfileStatus.ACTIVE)){
+            throw new AppBadException("you are not allowed");
+        }
+            LocalDateTime from = LocalDateTime.now().minusMinutes(1);
+            LocalDateTime to = LocalDateTime.now();
+            if (emailSendHistoryRepository.countSendEmail(email, from, to) >= 3) {
+                throw new AppBadException("To many attempt. Please try after 1 minute.");
+            }
+
+            String code = RandomUtil.getRandomSmsCode();
+            boolean isSend = mailSender.sendEmail(email, "Resent password", "Please do not give the code to anyone! \n" + code);
+            if (!isSend) {
+                return "error";
+            }
+            EmailSendHistoryDTO emailSendHistoryDTO = new EmailSendHistoryDTO();
+            emailSendHistoryDTO.setMessage(code);
+            emailSendHistoryDTO.setEmail(email);
+            emailSendHistoryDTO.setProfile(optional.get());
+            emailSendHistoryDTO.setStatus(optional.get().getStatus());
+            emailSendHistoryService.saveEmailHistory(emailSendHistoryDTO);
+            return "Success";
+        }
+
+    public String resentPhone(String phone) {
+        Optional<ProfileEntity> optional = profileRepository.findByPhone(phone);
+        if (optional.isEmpty()){
+            throw new AppBadException("You are not registered. Please register first! ");
+        }
+        if (!optional.get().getStatus().equals(ProfileStatus.ACTIVE)){
+            throw new AppBadException("you are not allowed");
+        }
+        LocalDateTime from = LocalDateTime.now().minusMinutes(1);
+        LocalDateTime to = LocalDateTime.now();
+        if (smsHistoryRepository.countSendPhone(phone, from, to) > 1) {
+            throw new AppBadException("To many attempt. Please try after 1 minute.");
+        }
+
+        String code = RandomUtil.getRandomSmsCode();
+        smsServerService.send(phone, "<#> Resent password", " Please do not give the code to anyone! \n code: " + code);
+
+        SmsHistoryEntity entity = new SmsHistoryEntity();
+        entity.setMessage(code);
+        entity.setCreatedDate(LocalDateTime.now());
+        entity.setPhone(phone);
+        entity.setStatus(SmsStatus.NEW);
+        smsHistoryRepository.save(entity);
+
+        return "Success";
+
+    }
 }

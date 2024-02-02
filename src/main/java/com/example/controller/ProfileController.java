@@ -55,7 +55,7 @@ public class ProfileController {
     }
 
     @PostMapping("/adm/filter")
-    public ResponseEntity<PageImpl<ProfileDTO>> create(@RequestBody ProfileFilterDTO dto,
+    public ResponseEntity<PageImpl<ProfileDTO>> filter(@RequestBody ProfileFilterDTO dto,
                                                        @RequestParam(value = "page", defaultValue = "1") Integer page,
                                                        @RequestParam(value = "size", defaultValue = "10") Integer size,
                                                        HttpServletRequest request) {

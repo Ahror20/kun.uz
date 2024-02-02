@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.SmsHistoryDTO;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -91,5 +92,6 @@ public class SmsServerService {
         }
 
     }
+
 
 }

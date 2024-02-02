@@ -41,7 +41,7 @@ public class ProfileService {
         if (!isTrue){
             throw new AppBadException("phone is wrong !");
         }
-        if (dto.getPhone().length() != 12 ){
+        if (dto.getPhone().length() != 13 ){
             throw new AppBadException("phone is wrong");
         }
 
@@ -77,7 +77,7 @@ public class ProfileService {
         if (!isTrue){
             throw new AppBadException("phone is wrong !");
         }
-        if (dto.getPhone().length() != 12 ){
+        if (dto.getPhone().length() != 13 ){
             throw new AppBadException("phone is wrong");
         }
 

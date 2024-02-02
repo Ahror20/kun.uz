@@ -22,6 +22,7 @@ public class SecuredFilterConfig {
         bean.addUrlPatterns("/profile/adm/*");
         bean.addUrlPatterns("/profile/adm/**");
         bean.addUrlPatterns("/email_send_history/adm/*");
+        bean.addUrlPatterns("/sms_history/adm/*");
 
         return bean;
     }
