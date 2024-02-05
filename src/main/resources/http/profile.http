@@ -14,18 +14,18 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MjcyNjcsImlkIjoxLCJyb
 }
 
 ### Update profiel admin
-PUT localhost:8080/profile/3
+PUT localhost:8080/profile/63
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY1MDY1NDEsImlkIjoxLCJyb2xlIjoiQURNSU4iLCJleHAiOjE3MDY1OTI5NDEsImlzcyI6Ikt1blV6VGVzdCJ9.1QCpjHFvzM6Zp-RfLUEVDl1zHzcx5J6bR9smsRYxadlrMYuw5qjkvO7CW6bF5-5QBaY8esQZw5yNjApp6_I6ng
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY5ODk5NTYsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3MDc2MzU2LCJpc3MiOiJLdW5VelRlc3QifQ.2-xieo59TqPm_CpqcNWRARXDcVKusO0-ZVsuNlEg8g3cCvVGvj9sYA0cjrXfvE6wqlU4potRDY4FlD9xNJt0og
 
 {
-  "name": "Vali",
-  "surname": "Valiyev",
+  "name": "Ahror",
+  "surname": "Orzimurodov",
   "phone": "998912344444",
   "password": "8888",
-  "email": "valisf@icloud.com",
+  "email": "test@icloud.com",
   "status": "BLOCK",
-  "role": "USER"
+  "role": "MODERATOR"
 }
 ### Update profile any
 PUT localhost:8080/profile/any/2
@@ -56,4 +56,13 @@ Content-Type: application/json
 
 {
   "surname": "ev"
+}
+
+### update role
+PUT localhost:8080/profile/adm/updateRole/64
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY5OTIyOTcsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3MDc4Njk3LCJpc3MiOiJLdW5VelRlc3QifQ.IGzXYDnTxcPCJxTfFVyN2Jux60zCxW1BXvbFy8jocG8aJ5_Wu6T3ojzXuIn-hojluERtHyBX9HMEE6SYjhAZiw
+
+{
+  "role": "MODERATOR"
 }

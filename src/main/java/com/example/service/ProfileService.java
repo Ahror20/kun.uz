@@ -3,7 +3,6 @@ package com.example.service;
 import com.example.dto.*;
 import com.example.entity.ProfileEntity;
 import com.example.enums.ProfileRole;
-import com.example.enums.ProfileStatus;
 import com.example.exp.AppBadException;
 import com.example.repository.ProfileCustomRepository;
 import com.example.repository.ProfileRepository;
@@ -72,10 +71,6 @@ public class ProfileService {
 
         if (dto.getName().length()<3 || dto.getSurname().length()<3){
             throw new AppBadException("name or surname wrong");
-        }
-        boolean isTrue = checkPhone(dto.getPhone());
-        if (!isTrue){
-            throw new AppBadException("phone is wrong !");
         }
         if (dto.getPhone().length() != 13 ){
             throw new AppBadException("phone is wrong");
@@ -193,4 +188,12 @@ public class ProfileService {
 
     }
 
+    public Boolean updateRole(Integer id, ProfileRole role) {
+        Optional<ProfileEntity> optional = profileRepository.findById(id);
+        if (optional.isEmpty()){
+            throw new AppBadException("profile not found");
+        }
+        int n = profileRepository.updateRole(id, role,LocalDateTime.now());
+        return n == 1;
+    }
 }

@@ -16,11 +16,21 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
-
-    @PostMapping("")
+    @PostMapping("/moderator")
     public ResponseEntity<ArticleDTO> create(@RequestBody CRUDArticleDTO dto,
                                              HttpServletRequest request){
         Integer profileId = HttpRequestUtil.getProfileId(request, ProfileRole.MODERATOR);
         return ResponseEntity.ok(articleService.create(dto,profileId));
     }
+    @DeleteMapping("/moderator/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable("id") String id,
+                                          HttpServletRequest request){
+        HttpRequestUtil.getProfileId(request, ProfileRole.MODERATOR);
+        return ResponseEntity.ok(articleService.delete(id));
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ArticleDTO> update(@PathVariable("id") String id){
+        return ResponseEntity.ok(articleService.update(id));
+    }
+
 }

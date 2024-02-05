@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.example.entity.TypeEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +12,5 @@ public class CRUDArticleDTO {
     private String content;
     private Integer regionId;
     private Integer categoryId;
-    private ArticleTypeDTO [] articleType;
+    private TypeEntity[] type;
 }

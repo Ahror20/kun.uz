@@ -1,34 +1,9 @@
 ### Create
-POST localhost:8080/article_type
+POST localhost:8080/article-type/publisher
 Content-Type: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDcwNDc3MDYsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzEzNDEwNiwiaXNzIjoiS3VuVXpUZXN0In0.qXxpLjh5p9qgsD63jSyxtpdP25n0Mth39it4gX07MdnTJOo_y0ZkoDS5AnmtorNDxegv3QUGSNZo2TsNC0vRBg
 
 {
-  "order_number": 1,
-  "name_uz": "Asosiy",
-  "name_ru": "Oсновной",
-  "name_en": "Main"
+  "articleId": "16309e9d-f7bb-4b09-8912-b21b4a761931",
+  "typeId": 1
 }
-
-### Update
-PUT localhost:8080/article_type/1
-Content-Type: application/json
-
-{
-  "order_number": 2,
-  "name_uz": "Muharir",
-  "name_ru": "Редактор",
-  "name_en": "Editor"
-}
-
-### delete
-GET localhost:8080/article_type/delete/1
-
-### Pagination
-GET localhost:8080/article_type/pagination?page=1&size=2
-
-### Get by lan
-GET localhost:8080/article_type/geByLan?lan=eng
-
-### Test
-GET localhost:8080/article_type/test/1?lan=rdd

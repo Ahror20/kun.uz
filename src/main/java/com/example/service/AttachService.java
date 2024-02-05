@@ -1,12 +1,17 @@
 package com.example.service;
 
 import com.example.dto.AttachDTO;
+import com.example.dto.ProfileDTO;
 import com.example.entity.AttachEntity;
+import com.example.entity.ProfileEntity;
 import com.example.exp.AppBadException;
 import com.example.repository.AttachRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,12 +20,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AttachService {
@@ -29,45 +36,47 @@ public class AttachService {
 
     @Value("${server.url}")
     private String serverUrl;
-    public String saveToSystem(MultipartFile file) { // mazgi.png
-        try {
-            File folder = new File("attaches");
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get("attaches/" + file.getOriginalFilename()); // attaches/mazgi.png
-            Files.write(path, bytes);
-            return file.getOriginalFilename();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-//    public byte[] loadImage(String fileName) { // zari.jpg
-//        BufferedImage originalImage;
+//    public String saveToSystem(MultipartFile file) { // mazgi.png
 //        try {
-//            originalImage = ImageIO.read(new File("attaches/" + fileName));
-//            // attaches/zari.jpg
+//            File folder = new File("attaches");
+//            if (!folder.exists()) {
+//                folder.mkdir();
+//            }
 //
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            ImageIO.write(originalImage, "png", baos);
-//            baos.flush();
-//
-//            byte[] imageInByte;
-//            imageInByte = baos.toByteArray();
-//            baos.close();
-//            return imageInByte;
-//        } catch (Exception e) {
-//            return new byte[0];
+//            byte[] bytes = file.getBytes();
+//            Path path = Paths.get("attaches/" + file.getOriginalFilename()); // attaches/mazgi.png
+//            Files.write(path, bytes);
+//            return file.getOriginalFilename();
+//        } catch (IOException e) {
+//            e.printStackTrace();
 //        }
-//    }
-    public byte[] open_general(String fileName) {
+//        return null;
+  //  }
+
+    public byte[] loadImage(String fileName) { // zari.jpg
+        BufferedImage originalImage;
+        try {
+            originalImage = ImageIO.read(new File("uploads/" + fileName));
+            // attaches/zari.jpg
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(originalImage, "png", baos);
+            baos.flush();
+
+            byte[] imageInByte;
+            imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch (Exception e) {
+            return new byte[0];
+        }
+    }
+    public byte[] open_general(String attachId) {
+        String id = attachId.substring(0, attachId.lastIndexOf("."));
+        AttachEntity entity = get(id);
         byte[] data;
         try {
-            Path file = Paths.get("attaches/" + fileName);
+            Path file = Paths.get("uploads/" + entity.getPath() + "/" + attachId);
             data = Files.readAllBytes(file);
             return data;
         } catch (IOException e) {
@@ -75,17 +84,15 @@ public class AttachService {
         }
         return new byte[0];
     }
-    public String getYmDString() {
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-        int day = Calendar.getInstance().get(Calendar.DATE);
-
-        return year + "/" + month + "/" + day; // 2024/4/23
-    }
-    public String getExtension(String fileName) { // mp3/jpg/npg/mp4.....
-        int lastIndex = fileName.lastIndexOf(".");
-        return fileName.substring(lastIndex + 1);
-    }
+//        byte[] data;
+//        try {
+//            Path file = Paths.get("attaches/" + fileName);
+//            data = Files.readAllBytes(file);
+//            return data;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return new byte[0];
 
     public AttachDTO save(MultipartFile file) { // mazgi.png
         try {
@@ -103,6 +110,7 @@ public class AttachService {
             //                         uploads/ + Path + id + extension
             Files.write(path, bytes);
 
+
             AttachEntity entity = new AttachEntity();
             entity.setSize(file.getSize());
             entity.setExtension(extension);
@@ -119,32 +127,95 @@ public class AttachService {
         }
         return null;
     }
+//    public byte[] loadImage(String attachId) { // dasdasd-dasdasda-asdasda-asdasd.jpg
+//        String id = attachId.substring(0, attachId.lastIndexOf("."));
+//        AttachEntity entity = get(id);
+//        byte[] data;
+//        try {
+//            Path file = Paths.get("uploads/" + entity.getPath() + "/" + attachId);
+//            data = Files.readAllBytes(file);
+//            return data;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return new byte[0];
+//    }
+    public String getYmDString() {
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int day = Calendar.getInstance().get(Calendar.DATE);
+
+        return year + "/" + month + "/" + day; // 2024/4/23
+    }
+    public String getExtension(String fileName) { // mp3/jpg/npg/mp4.....
+        int lastIndex = fileName.lastIndexOf(".");
+        return fileName.substring(lastIndex + 1);
+    }
 
     public AttachDTO toDTO(AttachEntity entity) {
         AttachDTO dto = new AttachDTO();
         dto.setId(entity.getId());
-        dto.setUrl(serverUrl + "/attach/open/" + entity.getId() + "." + entity.getExtension());
+        dto.setPath(entity.getPath());
+        dto.setExtension(entity.getExtension());
+        dto.setSize(entity.getSize());
+        dto.setOriginalName(entity.getOriginalName());
+        dto.setCreatedData(entity.getCreatedData());
+        dto.setUrl(serverUrl + "/attach/open-general/" + entity.getId() + "." + entity.getExtension());
         return dto;
     }
 
-    AttachEntity get(String id) {
+    private AttachEntity get(String id) {
         return attachRepository.findById(id).orElseThrow(() -> {
             throw new AppBadException("File not found");
         });
     }
 
-    public byte[] loadImage(String attachId) { // dasdasd-dasdasda-asdasda-asdasd.jpg
-        String id = attachId.substring(0, attachId.lastIndexOf("."));
-        AttachEntity entity = get(id);
-        byte[] data;
-        try {
-            Path file = Paths.get("uploads/" + entity.getPath() + "/" + attachId);
-            data = Files.readAllBytes(file);
-            return data;
-        } catch (IOException e) {
-            e.printStackTrace();
+    public PageImpl<AttachDTO> pagination(Integer page, Integer size) {
+        Sort sort = Sort.by(Sort.Direction.DESC,"createdData");
+        Pageable paging =  PageRequest.of(page-1,size,sort);
+
+        Page<AttachEntity> studentPage=attachRepository.findAll(paging);
+        List<AttachEntity> entityList = studentPage.getContent();
+        long totalElements = studentPage.getTotalElements();
+
+        List<AttachDTO> dtoList = new LinkedList<>();
+        for (AttachEntity entity : entityList) {
+            dtoList.add(toDTO(entity));
         }
-        return new byte[0];
+        return new PageImpl<>(dtoList,paging,totalElements);
     }
 
+    public Boolean delete(String id) {
+        Optional<AttachEntity> optional = attachRepository.findById(id);
+        if (optional.isEmpty()){
+            throw new AppBadException("attach not found");
+        }
+
+        Path path = Paths.get("uploads/" + optional.get().getPath() + "/" + id + "." + optional.get().getExtension());
+        try {
+            Files.delete(path);
+            attachRepository.delete(optional.get());
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Resource download(String id) {
+        Optional<AttachEntity> optional = attachRepository.findById(id);
+        if (optional.isEmpty()){
+            throw new AppBadException("attach not found");
+        }
+        Path path = Paths.get("uploads/" + optional.get().getPath() + "/" + id + "." + optional.get().getExtension());
+        try {
+            Resource resource = new UrlResource(path.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
 }

@@ -1,8 +1,15 @@
 package com.example.controller;
 
 import com.example.dto.AttachDTO;
+import com.example.dto.ProfileDTO;
+import com.example.enums.ProfileRole;
 import com.example.service.AttachService;
+import com.example.util.HttpRequestUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,4 +49,28 @@ public class AttachController {
     public byte[] open_general(@PathVariable("fileName") String fileName) {
         return attachService.open_general(fileName);
     }
+
+    @GetMapping("/adm/pagination")
+    public ResponseEntity<PageImpl<AttachDTO>> pagination(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                          @RequestParam(value = "size", defaultValue = "1") Integer size,
+                                                          HttpServletRequest request) {
+        HttpRequestUtil.getProfileId(request, ProfileRole.ADMIN);
+        return ResponseEntity.ok(attachService.pagination(page, size));
+    }
+
+    @DeleteMapping("/adm/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable("id") String id,
+                                          HttpServletRequest request) {
+        HttpRequestUtil.getProfileId(request, ProfileRole.ADMIN);
+        return ResponseEntity.ok(attachService.delete(id));
+
+    }
+
+    @GetMapping("/download/{id:.+}")
+    public ResponseEntity<Resource> download(@PathVariable("id") String id) {
+        Resource file = attachService.download(id);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
 }

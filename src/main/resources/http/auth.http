@@ -2,12 +2,17 @@
 POST localhost:8080/auth/login
 Content-Type: application/json
 
-
 {
-  "email": "admin@mail.ru",
-  "password": "12345"
-
+  "email": "norobyev12@icloud.com",
+  "password": "1212"
 }
+
+
+//{
+//  "email": "admin@mail.ru",
+//  "password": "12345"
+//
+//}
 
 ### registration
 POST localhost:8080/auth/registration

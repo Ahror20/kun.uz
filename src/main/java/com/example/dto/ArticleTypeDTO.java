@@ -1,22 +1,21 @@
 package com.example.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.example.entity.ArticleEntity;
+import com.example.entity.ProfileEntity;
+import com.example.entity.TypeEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ArticleTypeDTO {
     private Integer id;
-    private Integer order_number;
-    private String nameUz;
-    private String nameRu;
-    private String nameEn;
-    private String name;
-    private Boolean visible;
-    private LocalDateTime updatedDate;
+    private ArticleEntity article;
+    private TypeEntity type;
+    private ProfileEntity publisher;
     private LocalDateTime createdDate;
 }

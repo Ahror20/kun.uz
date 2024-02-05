@@ -43,5 +43,10 @@ public interface ProfileRepository extends CrudRepository<ProfileEntity,Integer>
     @Query("Update ProfileEntity  set status =?2 where id = ?1")
     int  updateStatus(Integer id, ProfileStatus active);
 
+    @Transactional
+    @Modifying
+    @Query("Update ProfileEntity  set role =?2, updatedDate=?3 where id = ?1")
+    int  updateRole(Integer id, ProfileRole role,LocalDateTime updatedDate);
+
     Optional<ProfileEntity> findByPhoneOrEmail(String phone,String email);
 }

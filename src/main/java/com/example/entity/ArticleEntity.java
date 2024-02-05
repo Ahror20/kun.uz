@@ -23,7 +23,7 @@ public class ArticleEntity {
     @Column(nullable = false, columnDefinition = "text")
     private String content;
     @Column(nullable = false, name = "shared_count")
-    private Integer sharedCount=0;
+    private Integer sharedCount;
     @ManyToOne
     @JoinColumn(name = "region_id")
     private RegionEntity region;
@@ -31,22 +31,23 @@ public class ArticleEntity {
     @JoinColumn(name = "moderator_id",nullable = false)
     private ProfileEntity moderator;
     @ManyToOne
-    @JoinColumn(name = "publisher_id",nullable = false)
+    @JoinColumn(name = "publisher_id")
     private ProfileEntity publisher;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ArticleStatus status;
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();
-    @Column(name = "published_date", nullable = false)
+    @Column(name = "published_date")
     private LocalDateTime publishedDate;
     @Column(name = "visible")
-    private boolean visible = true;
+    private Boolean visible = true;
+    @Column(name = "view_count")
+    private Integer viewCount;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<ArticleTypeEntity> typeList;
 
 
 

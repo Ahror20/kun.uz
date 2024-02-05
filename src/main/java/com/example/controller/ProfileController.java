@@ -39,7 +39,6 @@ public class ProfileController {
         Integer id = HttpRequestUtil.getProfileId(request);
         return ResponseEntity.ok(profileService.updateOwn(id, dto));
     }
-
     @GetMapping("/adm/pagination")
     public ResponseEntity<PageImpl<ProfileDTO>> pagination(@RequestParam(value = "page" ,defaultValue = "1") Integer page,
                                                            @RequestParam(value = "size" , defaultValue = "1") Integer size,
@@ -62,6 +61,13 @@ public class ProfileController {
         HttpRequestUtil.getProfileId(request,ProfileRole.ADMIN);
         PageImpl<ProfileDTO> result = profileService.filter(dto, page, size);
         return ResponseEntity.ok(result);
+    }
+    @PutMapping("/adm/updateRole/{id}")
+    public ResponseEntity<Boolean> updateRole(@PathVariable("id") Integer id,
+                                              @RequestBody ProfileCRUDDTO dto,
+                                              HttpServletRequest request){
+        HttpRequestUtil.getProfileId(request,ProfileRole.ADMIN);
+        return ResponseEntity.ok(profileService.updateRole(id, dto.getRole()));
     }
 
 

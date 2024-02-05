@@ -1,124 +1,64 @@
 package com.example.service;
 
 import com.example.dto.ArticleTypeDTO;
-import com.example.dto.RegionDTO;
+import com.example.dto.CreateArticleTypeDTO;
+import com.example.entity.ArticleEntity;
 import com.example.entity.ArticleTypeEntity;
-import com.example.entity.RegionEntity;
-import com.example.enums.AppLanguage;
+import com.example.entity.ProfileEntity;
+import com.example.entity.TypeEntity;
 import com.example.exp.AppBadException;
+import com.example.repository.ArticleRepository;
 import com.example.repository.ArticleTypeRepository;
+import com.example.repository.ProfileRepository;
+import com.example.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 
 @Service
 public class ArticleTypeService {
     @Autowired
     private ArticleTypeRepository articleTypeRepository;
-
-    public ArticleTypeDTO create(ArticleTypeDTO dto) {
-        Optional<ArticleTypeEntity> optional = articleTypeRepository.findByOrderNumber(dto.getOrder_number());
-        if (optional.isPresent()) {
-            throw new AppBadException("There is an article type with such order number");
+    @Autowired
+    private ArticleRepository articleRepository;
+    @Autowired
+    private TypeRepository typeRepository;
+    @Autowired
+    private ProfileRepository profileRepository;
+    public ArticleTypeDTO create(CreateArticleTypeDTO dto, Integer id) {
+        Optional<ProfileEntity> profile = profileRepository.findById(id);
+        if (profile.isEmpty()){
+            throw new AppBadException("profile not found");
+        }
+        Optional<ArticleEntity> article = articleRepository.findById(dto.getArticleId());
+        if (article.isEmpty()){
+            throw new AppBadException("article not found");
+        }
+        if (article.get().getVisible().equals(false)){
+            throw new AppBadException("this article has been deleted");
+        }
+        Optional<TypeEntity> type = typeRepository.findById(dto.getTypeId());
+        if (type.isEmpty()){
+            throw new AppBadException("type not found");
         }
         ArticleTypeEntity entity = new ArticleTypeEntity();
-        entity.setOrderNumber(dto.getOrder_number());
-        entity.setNameUz(dto.getNameUz());
-        entity.setNameRu(dto.getNameRu());
-        entity.setNameEn(dto.getNameEn());
-
+        entity.setPublisher(profile.get());
+        entity.setType(type.get());
+        entity.setArticle(article.get());
         articleTypeRepository.save(entity);
 
-        dto.setId(entity.getId());
-        dto.setVisible(entity.getVisible());
-        dto.setCreatedDate(entity.getCreatedDate());
-        return dto;
-
+        return toDTO(entity);
     }
 
-    public boolean update(Integer id, ArticleTypeDTO dto) {
-        Optional<ArticleTypeEntity> optionalById = articleTypeRepository.findById(id);
-        if (optionalById.isEmpty()) {
-            throw new AppBadException("Article type with this ID was not found");
-        }
-
-        Optional<ArticleTypeEntity> optional = articleTypeRepository.findByOrderNumber(dto.getOrder_number());
-        if (optional.isPresent()) {
-            throw new AppBadException("There is an article type with such order number");
-        }
-
-        dto.setUpdatedDate(LocalDateTime.now());
-
-        int result = articleTypeRepository.updateArticleType(dto.getOrder_number(), dto.getNameUz(), dto.getNameRu(), dto.getNameEn(), dto.getUpdatedDate(), id);
-        if (result == 1) {
-            return true;
-        }
-        throw new AppBadException("each fields is wrong");
-    }
-
-    public Boolean delete(Integer id) {
-        Optional<ArticleTypeEntity> optionalById = articleTypeRepository.findById(id);
-        if (optionalById.isEmpty()) {
-            throw new AppBadException("Article type with this ID was not found");
-        }
-        int result = articleTypeRepository.delete(id);
-        if (result == 1) {
-            return true;
-        }
-        throw new AppBadException("each fields is wrong");
-    }
-
-    public PageImpl<ArticleTypeDTO> pagination(Integer page, Integer size) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdDate");
-        Pageable paging = PageRequest.of(page - 1, size, sort);
-
-        Page<ArticleTypeEntity> studentPage = articleTypeRepository.findAll(paging);
-
-        List<ArticleTypeEntity> entityList = studentPage.getContent();
-        long totalElements = studentPage.getTotalElements();
-
-        List<ArticleTypeDTO> dtoList = new LinkedList<>();
-        for (ArticleTypeEntity entity : entityList) {
-            dtoList.add(toDTO(entity));
-        }
-        return new PageImpl<>(dtoList, paging, totalElements);
-
-    }
-
-    private ArticleTypeDTO toDTO(ArticleTypeEntity entity) {
+    private ArticleTypeDTO toDTO(ArticleTypeEntity entity){
         ArticleTypeDTO dto = new ArticleTypeDTO();
+        dto.setPublisher(entity.getPublisher());
         dto.setId(entity.getId());
-        dto.setOrder_number(entity.getOrderNumber());
-        dto.setNameEn(entity.getNameEn());
-        dto.setNameRu(entity.getNameRu());
-        dto.setNameUz(entity.getNameUz());
-        dto.setVisible(entity.getVisible());
-        dto.setUpdatedDate(entity.getUpdatedDate());
+        dto.setType(entity.getType());
+        dto.setArticle(entity.getArticle());
         dto.setCreatedDate(entity.getCreatedDate());
         return dto;
-    }
-
-    public List<ArticleTypeDTO> getByLan(AppLanguage language) {
-        List<ArticleTypeDTO> dtoList = new LinkedList<>();
-        Iterable<ArticleTypeEntity> all = articleTypeRepository.findAll();
-
-        for (ArticleTypeEntity entity : all) {
-            ArticleTypeDTO dto = new ArticleTypeDTO();
-            dto.setId(entity.getId());
-            switch (language) {
-                case uz -> dto.setName(entity.getNameUz());
-                case ru -> dto.setName(entity.getNameRu());
-                default -> dto.setName(entity.getNameEn());
-            }
-            ;
-            dtoList.add(dto);
-        }
-        return dtoList;
     }
 }
-
-
-

@@ -30,5 +30,6 @@ public class ArticleDTO {
     private ArticleStatus status;
     private LocalDateTime createdDate;
     private LocalDateTime publishedDate;
+    private Integer viewCount;
     private boolean visible;
 }

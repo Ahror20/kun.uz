@@ -1,1 +1,12 @@
 ### Create
+POST localhost:8080/category/adm
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY5ODk5NTYsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3MDc2MzU2LCJpc3MiOiJLdW5VelRlc3QifQ.2-xieo59TqPm_CpqcNWRARXDcVKusO0-ZVsuNlEg8g3cCvVGvj9sYA0cjrXfvE6wqlU4potRDY4FlD9xNJt0og
+
+{
+  "order_number": 1,
+  "nameEn": "Dunyo",
+  "nameRu": "World",
+  "nameUz": "Mirovoy"
+}
+

@@ -1,0 +1,33 @@
+### Create
+POST localhost:8080/type/adm
+Content-Type: application/json
+
+{
+  "order_number": 1,
+  "nameUz": "Muhararir",
+  "nameRu": "Редактор",
+  "nameEn": "Editor"
+}
+
+### Update
+PUT localhost:8080/type/1
+Content-Type: application/json
+
+{
+  "order_number": 2,
+  "name_uz": "Muharir",
+  "name_ru": "Редактор",
+  "name_en": "Editor"
+}
+
+### delete
+GET localhost:8080/type/delete/1
+
+### Pagination
+GET localhost:8080/type/pagination?page=1&size=2
+
+### Get by lan
+GET localhost:8080/type/geByLan?lan=eng
+
+### Test
+GET localhost:8080/type/test/1?lan=rdd
