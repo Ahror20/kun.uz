@@ -18,22 +18,22 @@ public class SecuredFilterConfig {
         bean.addUrlPatterns("/region/adm");
         bean.addUrlPatterns("/region/adm/*");
         bean.addUrlPatterns("/region/adm/**");
-        bean.addUrlPatterns("/category/adm/");
-        bean.addUrlPatterns("/category/adm/*");
-        bean.addUrlPatterns("/category/adm/**");
         bean.addUrlPatterns("/profile/adm");
         bean.addUrlPatterns("/profile/adm/*");
         bean.addUrlPatterns("/profile/adm/**");
         bean.addUrlPatterns("/email_send_history/adm/*");
         bean.addUrlPatterns("/sms_history/adm/*");
-        bean.addUrlPatterns("/attach/adm/*");
-        bean.addUrlPatterns("/article/moderator");
-        bean.addUrlPatterns("/article/moderator/*");
-        bean.addUrlPatterns("/article-type/publisher");
+        bean.addUrlPatterns("/profile/adm/**");
+        bean.addUrlPatterns("/profile/adm/*");
+        bean.addUrlPatterns("/profile/adm");
+        bean.addUrlPatterns("/article/changeStatusById/*");
+        bean.addUrlPatterns("/article/changeStatusById");
+        bean.addUrlPatterns("/article/changeStatusById/**");
+        bean.addUrlPatterns("/article_like/*");
+        bean.addUrlPatterns("/comment/*");
+
 
 
         return bean;
     }
-
-
 }

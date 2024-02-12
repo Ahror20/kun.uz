@@ -3,10 +3,10 @@ POST localhost:8080/type/adm
 Content-Type: application/json
 
 {
-  "order_number": 1,
-  "nameUz": "Muhararir",
-  "nameRu": "Редактор",
-  "nameEn": "Editor"
+  "order_number": 8,
+  "nameUz": "test uz",
+  "nameRu": "test ru",
+  "nameEn": "test eng"
 }
 
 ### Update

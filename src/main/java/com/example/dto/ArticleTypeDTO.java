@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @Setter
 public class ArticleTypeDTO {
     private Integer id;
-    private ArticleEntity article;
-    private TypeEntity type;
-    private ProfileEntity publisher;
-    private LocalDateTime createdDate;
+    private String articleId;
+    private Integer typeId;
 }

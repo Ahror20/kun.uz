@@ -4,6 +4,7 @@ import com.example.enums.ArticleStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +16,9 @@ import java.util.UUID;
 @Table(name = "article")
 public class ArticleEntity {
     @Id
-    private String id = UUID.randomUUID().toString();
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
@@ -24,18 +27,37 @@ public class ArticleEntity {
     private String content;
     @Column(nullable = false, name = "shared_count")
     private Integer sharedCount;
+
+    @Column(name = "region_id")
+    private Integer regionId;
     @ManyToOne
-    @JoinColumn(name = "region_id")
+    @JoinColumn(name = "region_id",insertable = false,updatable = false)
     private RegionEntity region;
+
+    @Column(name = "moderator_id")
+    private Integer moderatorId;
     @ManyToOne
-    @JoinColumn(name = "moderator_id",nullable = false)
+    @JoinColumn(name = "moderator_id",nullable = false,insertable = false,updatable = false)
     private ProfileEntity moderator;
+
+    @Column(name = "publisher_id")
+    private Integer publisherId;
     @ManyToOne
-    @JoinColumn(name = "publisher_id")
+    @JoinColumn(name = "publisher_id",insertable = false,updatable = false)
     private ProfileEntity publisher;
+
+    @Column(name = "photo_id")
+    private String photoID;
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "photo_id",insertable = false,updatable = false,nullable = false)
+    private AttachEntity photo;
+
+    @Column(name = "category_id")
+    private Integer categoryId ;
+    @ManyToOne
+    @JoinColumn(name = "category_id",insertable = false,updatable = false )
     private CategoryEntity category;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ArticleStatus status;

@@ -1,0 +1,40 @@
+### create
+POST localhost:8080/comment/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MTcwNTQsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzgwMzQ1NCwiaXNzIjoiS3VuVXpUZXN0In0.CajTn4tcbldyH48USYaa6jRW4lSxB9RF3WMIcWX3pc_r2A30E_MARRi3KWCY29DEjlaSPN7iNERC35UOy_1vqg
+
+{
+  "content": "afkfakdafsfasfsa",
+  "articleId": "ddd19677-cdd7-411d-81e4-69033425b3a7"
+}
+
+### update
+PUT localhost:8080/comment/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MTcwNTQsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzgwMzQ1NCwiaXNzIjoiS3VuVXpUZXN0In0.CajTn4tcbldyH48USYaa6jRW4lSxB9RF3WMIcWX3pc_r2A30E_MARRi3KWCY29DEjlaSPN7iNERC35UOy_1vqg
+
+{
+  "content": "futbol rasvo  bo`ldi",
+  "articleId": "ddd19677-cdd7-411d-81e4-69033425b3a7"
+}
+
+### delete
+DELETE localhost:8080/comment/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MTcwNTQsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzgwMzQ1NCwiaXNzIjoiS3VuVXpUZXN0In0.CajTn4tcbldyH48USYaa6jRW4lSxB9RF3WMIcWX3pc_r2A30E_MARRi3KWCY29DEjlaSPN7iNERC35UOy_1vqg
+
+### Get list by article id
+GET localhost:8080/comment/getCommitListByArticleId/ddd19677-cdd7-411d-81e4-69033425b3a7
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MTcwNTQsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzgwMzQ1NCwiaXNzIjoiS3VuVXpUZXN0In0.CajTn4tcbldyH48USYaa6jRW4lSxB9RF3WMIcWX3pc_r2A30E_MARRi3KWCY29DEjlaSPN7iNERC35UOy_1vqg
+
+### pagaination
+GET localhost:8080/comment/pagination
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MzE4MjEsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3ODE4MjIxLCJpc3MiOiJLdW5VelRlc3QifQ.FP7rkTbSbDrJcM-nHt1kJMXQivZZ9QLtYc72L0SP-F_kAcIUIU9TZxDs2GlHuN-2nb30ByjBxZpp0dCf3gqJxQ
+
+### filter
+POST localhost:8080/comment/filter
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MzcyNzgsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3ODIzNjc4LCJpc3MiOiJLdW5VelRlc3QifQ.r-xIR0OzzksrlXNhoOlYLuqEjbfGaKLpil4xETGw15exLJgTGYNv-pwKxcigrnyV5zxTfmb5J8T5aPlbqF5LJA
+
+{
+  "profileId": 64
+}

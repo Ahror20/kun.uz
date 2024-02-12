@@ -1,15 +1,50 @@
 ### Create
 POST localhost:8080/article/moderator
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDcwNDYwNDEsImlkIjo2NCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTcwNzEzMjQ0MSwiaXNzIjoiS3VuVXpUZXN0In0.axHrqBTsYNujhS4DIDfYUGGYW55NvUS7K23vFvWxc9YM5Ils-hahv3l0NWwAg38UF18QZ7VFCm7sP1BGgCEeQA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDczOTg3MjMsImlkIjo2NCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTcwNzQ4NTEyMywiaXNzIjoiS3VuVXpUZXN0In0.s2ARpRtbICJiElwrRseiUvuU2VbDoyFaEpWxmSZP6MqkwmGoAwQ80gK7CHCpwgaegDZZmLRX0OZvs4TyaReQ0A
 
 {
-  "title": "Futbol",
+  "title": "Osiya chempionati",
   "description": "O`zbekiston vs Qatar o`yini",
   "content": "bugun O`zbekiston yeb quydi.Shu munosabat bila hammani tabrikliman",
   "regionId": 1,
-  "categoryId": 1
+  "categoryId": 1,
+  "articleType": [1,2],
+  "photoId": "54baef48-81dd-46d3-bf2c-dc8fc10565ba"
 }
 ### delete
-DELETE localhost:8080/article/moderator/16309e9d-f7bb-4b09-8912-b21b4a761931
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDcwNTk4ODAsImlkIjo2NCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTcwNzE0NjI4MCwiaXNzIjoiS3VuVXpUZXN0In0.hWD4vCiqek8Kw-0Eh7IJMBH2bBj4bxjJ2D9RFJ-D14avTjh2nf9VJ-GZ8Nw5Xki1r7jsh5MnF5ISoQK5rg-Pxg
+DELETE localhost:8080/article/moderator/5425443c-dadb-4593-b310-0b962bb8ba36
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDczOTg3MjMsImlkIjo2NCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTcwNzQ4NTEyMywiaXNzIjoiS3VuVXpUZXN0In0.s2ARpRtbICJiElwrRseiUvuU2VbDoyFaEpWxmSZP6MqkwmGoAwQ80gK7CHCpwgaegDZZmLRX0OZvs4TyaReQ0A
+
+
+### update
+PUT localhost:8080/article/moderator/a502171c-0656-4cd2-984a-8d63b6088eb0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDczOTg3MjMsImlkIjo2NCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTcwNzQ4NTEyMywiaXNzIjoiS3VuVXpUZXN0In0.s2ARpRtbICJiElwrRseiUvuU2VbDoyFaEpWxmSZP6MqkwmGoAwQ80gK7CHCpwgaegDZZmLRX0OZvs4TyaReQ0A
+
+{
+  "title": "O`zbekistanda bugun",
+  "description": "Obxavo ma`lumotlari jjfgdjbds",
+  "content": "kgsdlsnuwqgyugyuasyusyugsa",
+  "shared_count": 2,
+  "photoId": "54baef48-81dd-46d3-bf2c-dc8fc10565ba",
+  "regionId": 1,
+  "categoryId": 1,
+  "articleType": [1,2,3,4,5,6]
+}
+
+### change status
+PUT localhost:8080/article/changeStatusById/1a303d92-310e-4757-af90-404c3223f307
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc1OTA2NDksImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzY3NzA0OSwiaXNzIjoiS3VuVXpUZXN0In0.PfQzWryQ-6idR-tbZ5xEodjp6vbMo0x5HshsW4-qFLEGxqwc7z93TfPkLQqs_eyFMdP5aCbCLZLDus9fMgFr6g
+
+{
+  "status": "PUBLISHED"
+}
+
+
+### get article by types limit 5
+GET localhost:8080/article/getLast5ArticleByTypes/2?limit=2
+
+
+

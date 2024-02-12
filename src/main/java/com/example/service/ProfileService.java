@@ -83,7 +83,7 @@ public class ProfileService {
         return true;
 
     }
-    private ProfileDTO toDTO(ProfileEntity entity) {
+    public ProfileDTO toDTO(ProfileEntity entity) {
         ProfileDTO dto = new ProfileDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());

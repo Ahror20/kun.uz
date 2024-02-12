@@ -1,0 +1,21 @@
+### like
+POST localhost:8080/article_like/like
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc2NzM0OTcsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzc1OTg5NywiaXNzIjoiS3VuVXpUZXN0In0.6LmsXztrrQsBIcWYvgKalA3JqCBamZ4gvmjXSUoY4jV1_S7XE2ri3rsF2bb0NHHdJQgh0DtrnQzAMkKoawR8yw
+
+{
+  "articleId": "ddd19677-cdd7-411d-81e4-69033425b3a7"
+}
+
+### dislike
+POST localhost:8080/article_like/dislike
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc2NzM0OTcsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzc1OTg5NywiaXNzIjoiS3VuVXpUZXN0In0.6LmsXztrrQsBIcWYvgKalA3JqCBamZ4gvmjXSUoY4jV1_S7XE2ri3rsF2bb0NHHdJQgh0DtrnQzAMkKoawR8yw
+
+{
+  "articleId": "ddd19677-cdd7-411d-81e4-69033425b3a7"
+}
+
+### remove
+DELETE localhost:8080/article_like/ddd19677-cdd7-411d-81e4-69033425b3a7
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc2NzM0OTcsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzc1OTg5NywiaXNzIjoiS3VuVXpUZXN0In0.6LmsXztrrQsBIcWYvgKalA3JqCBamZ4gvmjXSUoY4jV1_S7XE2ri3rsF2bb0NHHdJQgh0DtrnQzAMkKoawR8yw

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "type")
 public class TypeEntity extends BaseEntity {
-    @Column(name = "order_number",unique = true)
+    @Column(name = "order_number")
     private Integer orderNumber;
     @Column(nullable = false, name = "name_uz")
     private String nameUz;

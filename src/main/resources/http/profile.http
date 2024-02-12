@@ -61,8 +61,8 @@ Content-Type: application/json
 ### update role
 PUT localhost:8080/profile/adm/updateRole/64
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY5OTIyOTcsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3MDc4Njk3LCJpc3MiOiJLdW5VelRlc3QifQ.IGzXYDnTxcPCJxTfFVyN2Jux60zCxW1BXvbFy8jocG8aJ5_Wu6T3ojzXuIn-hojluERtHyBX9HMEE6SYjhAZiw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc1OTAwMDksImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3Njc2NDA5LCJpc3MiOiJLdW5VelRlc3QifQ.VS8NeiLyOVsJGAuy2fdHIftSMKVeFe5PDeglZD44sJWV9Mp5fWjuUscRl2CNc1RCLxOMxtxaDbPRfiJGOXJexg
 
 {
-  "role": "MODERATOR"
+  "role": "PUBLISHER"
 }

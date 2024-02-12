@@ -44,7 +44,7 @@ public class AuthService {
 
 
 
-    public ProfileDTO auth(AuthDTO profile) { // login
+    public ProfileDTO  auth(AuthDTO profile) { // login
         Optional<ProfileEntity> optional = profileRepository.findByEmailAndPassword(profile.getEmail(),
                 MDUtil.encode(profile.getPassword()));
 

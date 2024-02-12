@@ -1,20 +1,21 @@
 package com.example.service;
 
-import com.example.dto.ArticleDTO;
-import com.example.dto.CRUDArticleDTO;
+import com.example.dto.*;
 import com.example.entity.ArticleEntity;
-import com.example.entity.CategoryEntity;
-import com.example.entity.ProfileEntity;
-import com.example.entity.RegionEntity;
+import com.example.entity.ArticleTypeEntity;
 import com.example.enums.ArticleStatus;
-import com.example.enums.ProfileRole;
 import com.example.exp.AppBadException;
 import com.example.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ArticleService {
     @Autowired
@@ -25,37 +26,53 @@ public class ArticleService {
     private CategoryRepository categoryRepository;
     @Autowired
     private ProfileRepository profileRepository;
+    @Autowired
+    private ArticleTypeService articleTypeService;
+    @Autowired
+    private ArticleTypeRepository articleTypeRepository;
 
-    public ArticleDTO create(CRUDArticleDTO dto, Integer profileId) {
-        Optional<ProfileEntity> profileEntity = profileRepository.findById(profileId);
-        if (profileEntity.isEmpty()) {
-            throw new AppBadException("profile not found");
-        } else if (!profileEntity.get().getRole().equals(ProfileRole.MODERATOR)) {
-            throw new AppBadException("you are not moderator");
-        }
-        if (dto.getTitle().length() < 3 || dto.getDescription().length() < 3) {
-            throw new AppBadException("title or description is wrong");
-        }
-        Optional<RegionEntity> regionEntity = regionRepository.findById(dto.getRegionId());
-        if (regionEntity.isEmpty()) {
-            throw new AppBadException("region not found");
-        }
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(dto.getCategoryId());
-        if (categoryEntity.isEmpty()) {
-            throw new AppBadException("category not found");
-        }
+    public ArticleDTO create(CreateArticleDTO dto, Integer profileId) {
         ArticleEntity entity = new ArticleEntity();
-        entity.setCategory(categoryEntity.get());
-        entity.setRegion(regionEntity.get());
-        entity.setContent(dto.getContent());
-        entity.setDescription(dto.getDescription());
+        entity.setRegionId(dto.getRegionId());
+        entity.setCategoryId(dto.getCategoryId());
         entity.setTitle(dto.getTitle());
-        entity.setModerator(profileEntity.get());
+        entity.setContent(dto.getTitle());
+        entity.setDescription(dto.getDescription());
         entity.setStatus(ArticleStatus.NOT_PUBLISHED);
-        entity.setSharedCount(0);
+        entity.setPhotoID(dto.getPhotoId());
         entity.setViewCount(0);
+        entity.setSharedCount(0);
+        entity.setModeratorId(profileId);
         articleRepository.save(entity);
+
+        articleTypeService.create(entity.getId(), dto.getArticleType());
         return toDTO(entity);
+
+    }
+
+    public Boolean delete(String id) {
+        Optional<ArticleEntity> optional = articleRepository.findById(id);
+        if (optional.isEmpty()) {
+            log.warn("article not found");
+            throw new AppBadException("article not found");
+        }
+        int effectRows = articleRepository.delete(id);
+        return effectRows == 1;
+
+    }
+
+    public Boolean update(String id, UpdateArticleDTO dto, Integer profileId) {
+        Optional<ArticleEntity> optional = articleRepository.findById(id);
+        if (optional.isEmpty()) {
+            throw new AppBadException("article not found");
+        }
+
+        int effectRows = articleRepository.update(dto.getTitle(), dto.getDescription(), dto.getContent(), dto.getShared_count(), dto.getPhotoId(), dto.getRegionId(), dto.getCategoryId(),profileId,id);
+        if (effectRows != 1) {
+            return false;
+        }
+        articleTypeService.merge(id, dto.getArticleType());
+        return true;
     }
 
     private ArticleDTO toDTO(ArticleEntity entity) {
@@ -76,17 +93,41 @@ public class ArticleService {
         return dto;
     }
 
-    public Boolean delete(String id) {
+    public Boolean changeStatusByID(String id, Integer publisherId, UpdateArticleStatusDTO dto) {
         Optional<ArticleEntity> optional = articleRepository.findById(id);
-        if (optional.isEmpty()) {
+        if (optional.isEmpty()){
+            log.warn("article not found");
             throw new AppBadException("article not found");
         }
-        int effectRows = articleRepository.delete(id);
-        return effectRows == 1;
+        articleRepository.changeStatusById(dto.getStatus(),publisherId, LocalDateTime.now(),id);
+        return true;
+    }
+
+    public List<ArticleShortInfoDTO> getLast5ArticleByTypes(Integer id, Integer limit) {
+        List<ArticleTypeEntity> listTypes  = articleTypeRepository.findByTypeId(id);
+        if (listTypes.isEmpty()){
+            log.warn("did not find such type of article");
+            throw new AppBadException("did not find such type of article!");
+        }
+
+        List<ArticleTypeEntity> list = articleTypeRepository.findTop5ByTypes(id,limit);
+        List<ArticleShortInfoDTO> articleList = new ArrayList<>();
+
+        for (ArticleTypeEntity entity: list){
+            articleList.add(shortInfoDTO(entity.getArticle()));
+        }
+        return articleList;
 
     }
 
-    public ArticleDTO update(String id) {
-        return null;
+    public ArticleShortInfoDTO shortInfoDTO(ArticleEntity entity){
+        ArticleShortInfoDTO dto = new ArticleShortInfoDTO();
+        dto.setId(entity.getId());
+        dto.setImageId(entity.getPhoto().getId());
+        dto.setImageUrl(entity.getPhoto().getPath());
+        dto.setTitle(entity.getTitle());
+        dto.setDescription(entity.getDescription());
+        dto.setPublishedDate(entity.getPublishedDate());
+        return dto;
     }
 }

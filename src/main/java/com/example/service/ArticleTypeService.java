@@ -1,12 +1,6 @@
 package com.example.service;
 
-import com.example.dto.ArticleTypeDTO;
-import com.example.dto.CreateArticleTypeDTO;
-import com.example.entity.ArticleEntity;
 import com.example.entity.ArticleTypeEntity;
-import com.example.entity.ProfileEntity;
-import com.example.entity.TypeEntity;
-import com.example.exp.AppBadException;
 import com.example.repository.ArticleRepository;
 import com.example.repository.ArticleTypeRepository;
 import com.example.repository.ProfileRepository;
@@ -15,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ArticleTypeService {
@@ -27,38 +21,62 @@ public class ArticleTypeService {
     private TypeRepository typeRepository;
     @Autowired
     private ProfileRepository profileRepository;
-    public ArticleTypeDTO create(CreateArticleTypeDTO dto, Integer id) {
-        Optional<ProfileEntity> profile = profileRepository.findById(id);
-        if (profile.isEmpty()){
-            throw new AppBadException("profile not found");
+
+    //    private ArticleTypeDTO toDTO(ArticleTypeEntity entity){
+//        ArticleTypeDTO dto = new ArticleTypeDTO();
+//        dto.setId(entity.getId());
+//        dto.setType(entity.getType());
+//        dto.setArticle(entity.getArticle());
+//        dto.setCreatedDate(entity.getCreatedDate());
+//        return dto;
+//    }
+    public void create(String articleId, List<Integer> typesIdList) {
+        for (Integer typeId : typesIdList) {
+            create(articleId, typeId);
         }
-        Optional<ArticleEntity> article = articleRepository.findById(dto.getArticleId());
-        if (article.isEmpty()){
-            throw new AppBadException("article not found");
-        }
-        if (article.get().getVisible().equals(false)){
-            throw new AppBadException("this article has been deleted");
-        }
-        Optional<TypeEntity> type = typeRepository.findById(dto.getTypeId());
-        if (type.isEmpty()){
-            throw new AppBadException("type not found");
-        }
+    }
+
+    public void create(String articleId, Integer typesId) {
         ArticleTypeEntity entity = new ArticleTypeEntity();
-        entity.setPublisher(profile.get());
-        entity.setType(type.get());
-        entity.setArticle(article.get());
+        entity.setArticleId(articleId);
+        entity.setTypeId(typesId);
         articleTypeRepository.save(entity);
-
-        return toDTO(entity);
     }
 
-    private ArticleTypeDTO toDTO(ArticleTypeEntity entity){
-        ArticleTypeDTO dto = new ArticleTypeDTO();
-        dto.setPublisher(entity.getPublisher());
-        dto.setId(entity.getId());
-        dto.setType(entity.getType());
-        dto.setArticle(entity.getArticle());
-        dto.setCreatedDate(entity.getCreatedDate());
-        return dto;
+
+
+
+
+
+
+
+
+    public void merge(String articleId, List<Integer> newList) {
+        //oldin [1,2,3,]
+        //keyin [1,2,3,5,6,7,8]
+        List<ArticleTypeEntity> articleList = articleTypeRepository.findArticleId(articleId);
+        for (ArticleTypeEntity newArticleTypeEntity : articleList) {
+            int count = 0;
+            for (Integer natId : newList) {
+                if (newArticleTypeEntity.getTypeId().equals(natId)) {
+                    count++;
+                }
+            }
+            if (count == 0) {
+                articleTypeRepository.deleteEn(newArticleTypeEntity.getArticleId(), newArticleTypeEntity.getTypeId());
+            }
+            else {
+                articleTypeRepository.updateDate(LocalDateTime.now(),newArticleTypeEntity.getArticleId(), newArticleTypeEntity.getTypeId());
+            }
+        }
+
+        for (Integer atpId : newList) {         //keyin [1,2,3,5,6,7,8]
+            Optional<ArticleTypeEntity> optional = articleTypeRepository.getArticleTypeId(articleId, atpId);
+            if (optional.isEmpty()) {
+                create(articleId, atpId);
+            }
+        }
     }
+
+
 }

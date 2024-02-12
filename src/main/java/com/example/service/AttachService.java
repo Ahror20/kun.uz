@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -201,16 +203,17 @@ public class AttachService {
         }
     }
 
-    public Resource download(String id) {
-        Optional<AttachEntity> optional = attachRepository.findById(id);
-        if (optional.isEmpty()){
-            throw new AppBadException("attach not found");
-        }
-        Path path = Paths.get("uploads/" + optional.get().getPath() + "/" + id + "." + optional.get().getExtension());
+    public ResponseEntity download(String attachId) {
         try {
-            Resource resource = new UrlResource(path.toUri());
+            String id = attachId.substring(0, attachId.lastIndexOf("."));
+            AttachEntity entity = get(id);
+
+            Path file = Paths.get("uploads/" + entity.getPath() + "/" + attachId);
+            Resource resource = new UrlResource(file.toUri());
+
             if (resource.exists() || resource.isReadable()) {
-                return resource;
+                return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + entity.getOriginalName() + "\"").body(resource);
             } else {
                 throw new RuntimeException("Could not read the file!");
             }

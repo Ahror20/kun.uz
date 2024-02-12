@@ -16,5 +16,5 @@ DELETE localhost:8080/attach/adm/d0a61902-2278-4fe8-aab8-9fa1eef56503
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDY5Njg0MDAsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3MDU0ODAwLCJpc3MiOiJLdW5VelRlc3QifQ.G1KzaJsp4ZGc8vn-rEZfqeFtkf9z5g2QGwrGkguf2CszJIidL-7DjflRGlF-K6m4XMbmhmkUfdegPOw9pVvZpg
 
 ### download
-GET localhost:8080/attach/download/
+GET localhost:8080/attach/download/54baef48-81dd-46d3-bf2c-dc8fc10565ba.jpg
 
