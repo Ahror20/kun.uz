@@ -1,8 +1,9 @@
 package com.example.config;
 
 import com.example.dto.JwtDTO;
+import com.example.enums.ProfileRole;
 import com.example.util.JWTUtil;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -12,9 +13,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.util.Date;
 
-@Component
+
+
+//@Component
 public class TokenFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest,

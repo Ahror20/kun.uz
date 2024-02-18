@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.AttachDTO;
-import com.example.dto.ProfileDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.AttachService;
 import com.example.util.HttpRequestUtil;
@@ -9,9 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,14 +53,14 @@ public class AttachController {
     public ResponseEntity<PageImpl<AttachDTO>> pagination(@RequestParam(value = "page", defaultValue = "1") Integer page,
                                                           @RequestParam(value = "size", defaultValue = "1") Integer size,
                                                           HttpServletRequest request) {
-        HttpRequestUtil.getProfileId(request, ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(attachService.pagination(page, size));
     }
 
     @DeleteMapping("/adm/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") String id,
                                           HttpServletRequest request) {
-        HttpRequestUtil.getProfileId(request, ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(attachService.delete(id));
 
     }

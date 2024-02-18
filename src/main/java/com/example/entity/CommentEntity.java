@@ -34,7 +34,11 @@ public class CommentEntity {
     private Boolean visible=true;
 
 //    //toDo
-//    @Column(name = "replay_id")
-//    private Integer replyId;
+    @Column(name = "replay_id")
+    private Integer replyId;
+
+    @ManyToOne
+    @JoinColumn(name = "replay_id",insertable = false,updatable = false)
+    private CommentEntity reply;
 
 }

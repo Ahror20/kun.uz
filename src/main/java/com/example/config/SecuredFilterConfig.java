@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 import jakarta.servlet.Filter;
 
-@Configuration
+//@Configuration
 public class SecuredFilterConfig {
     @Autowired
     private TokenFilter tokenFilter;

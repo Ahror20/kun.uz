@@ -32,6 +32,7 @@ public class CommentService {
         entity.setContent(dto.getContent());
         entity.setArticleId(dto.getArticleId());
         entity.setProfileId(profileId);
+        entity.setReplyId(dto.getReplyId());
         commentRepository.save(entity);
         return toDTO(entity);
     }
@@ -72,7 +73,7 @@ public class CommentService {
             throw new AppBadException("commit not found");
         }
         Optional<ProfileEntity> profile = profileRepository.findById(profileId);
-        if (!entity.get().getProfileId().equals(profileId) || !profile.get().getRole().equals(ProfileRole.ADMIN)){
+        if (!entity.get().getProfileId().equals(profileId) || !profile.get().getRole().equals(ProfileRole.ROLE_ADMIN)){
             log.warn("content not found");
             throw new AppBadException("you are not allowed");
         }
@@ -126,5 +127,25 @@ public class CommentService {
 
         Pageable paging = PageRequest.of(page - 1, size);
         return new PageImpl<>(dtoList, paging, paginationResult.getTotalSize());
+    }
+
+    public List<GetRepliedListDTO> getRepliedList(Integer id) {
+        List<CommentEntity> list =commentRepository.getRepliedList(id);
+        if (list.isEmpty()){
+            throw new AppBadException("relied comment list empty");
+        }
+        List<GetRepliedListDTO> listDTOS = new ArrayList<>();
+        for (CommentEntity entity: list){
+            GetRepliedListDTO dto = new GetRepliedListDTO();
+            dto.setId(entity.getId());
+            dto.setUpdateDate(entity.getUpdatedDate());
+            dto.setCreateDate(entity.getCreatedDate());
+            dto.setProfileSurname(entity.getProfile().getSurname());
+            dto.setProfileName(entity.getProfile().getName());
+            dto.setProfileId(entity.getProfileId());
+            listDTOS.add(dto);
+        }
+        return listDTOS;
+
     }
 }

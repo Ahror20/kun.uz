@@ -1,14 +1,12 @@
 package com.example.controller;
 
 import com.example.dto.EmailSendHistoryDTO;
-import com.example.dto.ProfileDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.EmailSendHistoryService;
 import com.example.util.HttpRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +33,7 @@ public class EmailSendHistoryController {
     public ResponseEntity<PageImpl<EmailSendHistoryDTO>> pagination(@RequestParam(value = "page" ,defaultValue = "1") Integer page,
                                                            @RequestParam(value = "size" , defaultValue = "1") Integer size,
                                                            HttpServletRequest request) {
-        HttpRequestUtil.getProfileId(request, ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(emailSendHistoryService.pagination(page, size));
     }
 

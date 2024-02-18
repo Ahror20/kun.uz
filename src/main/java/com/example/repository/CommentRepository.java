@@ -24,4 +24,6 @@ public interface CommentRepository extends CrudRepository<CommentEntity,Integer>
     @Modifying
     @Query("update CommentEntity set visible = false where id=?1 ")
     int delete (Integer id);
+    @Query("select c from CommentEntity c where c.replyId=?1  ")
+    List<CommentEntity> getRepliedList(Integer replyId );
 }

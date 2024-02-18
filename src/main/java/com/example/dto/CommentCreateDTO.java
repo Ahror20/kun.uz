@@ -12,6 +12,5 @@ public class CommentCreateDTO {
     private  String content;
     @NotNull
     private String articleId;
-//    @NotNull
-//    private Integer replyId;
+    private Integer replyId;
 }

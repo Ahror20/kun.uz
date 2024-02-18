@@ -30,7 +30,7 @@ public class ProfileService {
         if (optional.isPresent()){
             throw new AppBadException("this email is already exist");
         }
-        if (dto.getRole().equals(ProfileRole.USER)){
+        if (dto.getRole().equals(ProfileRole.ROLE_USER)){
             throw new AppBadException("you cannot create a user");
         }
         if (dto.getName().length()<3 || dto.getSurname().length()<3){
