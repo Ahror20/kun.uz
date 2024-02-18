@@ -2,7 +2,6 @@ package com.example.controller;
 
 import com.example.dto.CategoryDTO;
 import com.example.dto.CreateCategoryDTO;
-import com.example.dto.RegionDTO;
 import com.example.enums.AppLanguage;
 import com.example.enums.ProfileRole;
 import com.example.service.CategoryService;
@@ -23,25 +22,25 @@ public class CategoryController {
     @PostMapping("/adm")
     public ResponseEntity<CategoryDTO> create(@RequestBody CreateCategoryDTO dto,
                                               HttpServletRequest request) {
-        HttpRequestUtil.getProfileId(request, ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(categoryService.create(dto));
     }
     @PutMapping("/adm/{id}")
     public ResponseEntity<Boolean> update(@PathVariable("id") Integer id,
                                           @RequestBody CategoryDTO dto,
                                           HttpServletRequest request) {
-        HttpRequestUtil.getProfileId(request,ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request,ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(categoryService.update(id, dto));
     }
     @DeleteMapping("/adm/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") Integer id,
                                           HttpServletRequest request) {
-        HttpRequestUtil.getProfileId(request,ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request,ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(categoryService.delete(id));
     }
     @GetMapping("/adm")
     public ResponseEntity<List<CategoryDTO>> getAll(HttpServletRequest request){
-        HttpRequestUtil.getProfileId(request,ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request,ProfileRole.ROLE_ADMIN);
         return ResponseEntity.of(categoryService.getAll());
     }
     @GetMapping("/geByLan")

@@ -28,7 +28,7 @@ public class InitService {
         admin.setEmail(adminEmail);
         admin.setPhone("998992587077");
         admin.setStatus(ProfileStatus.ACTIVE);
-        admin.setRole(ProfileRole.ADMIN);
+        admin.setRole(ProfileRole.ROLE_ADMIN);
         admin.setPassword(MDUtil.encode("12345"));
         profileRepository.save(admin);
     }

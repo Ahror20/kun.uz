@@ -1,10 +1,8 @@
 package com.example.controller;
 
-import com.example.dto.EmailSendHistoryDTO;
 import com.example.dto.SmsHistoryDTO;
 import com.example.enums.ProfileRole;
 import com.example.service.SmsHistoryService;
-import com.example.service.SmsServerService;
 import com.example.util.HttpRequestUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -34,7 +31,7 @@ public class SmsHistoryController {
     public ResponseEntity<PageImpl<SmsHistoryDTO>> pagination(@RequestParam(value = "page" ,defaultValue = "1") Integer page,
                                                                     @RequestParam(value = "size" , defaultValue = "1") Integer size,
                                                                     HttpServletRequest request) {
-        HttpRequestUtil.getProfileId(request, ProfileRole.ADMIN);
+        HttpRequestUtil.getProfileId(request, ProfileRole.ROLE_ADMIN);
         return ResponseEntity.ok(smsHistoryService.pagination(page, size));
     }
 }

@@ -1,9 +1,9 @@
 package com.example.service;
 
 import com.example.dto.*;
-import com.example.entity.EmailSendHistoryEntity;
 import com.example.entity.ProfileEntity;
 import com.example.entity.SmsHistoryEntity;
+import com.example.enums.AppLanguage;
 import com.example.enums.ProfileRole;
 import com.example.enums.ProfileStatus;
 import com.example.enums.SmsStatus;
@@ -11,12 +11,12 @@ import com.example.exp.AppBadException;
 import com.example.repository.EmailSendHistoryRepository;
 import com.example.repository.ProfileRepository;
 import com.example.repository.SmsHistoryRepository;
-import com.example.repository.SmsServerRepository;
 import com.example.util.JWTUtil;
 import com.example.util.MDUtil;
 import com.example.util.RandomUtil;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,30 +38,30 @@ public class AuthService {
     private SmsHistoryRepository smsHistoryRepository;
     @Autowired
     private SmsHistoryService smsHistoryService;
+    @Autowired
+    private ResourcesBundleService resourcesBundleService;
 
     private String text;
 
 
-
-
-    public ProfileDTO  auth(AuthDTO profile) { // login
+    public ProfileDTO auth(AuthDTO profile, AppLanguage appLanguage) { // login
         Optional<ProfileEntity> optional = profileRepository.findByEmailAndPassword(profile.getEmail(),
                 MDUtil.encode(profile.getPassword()));
 
         if (optional.isEmpty()) {
-            throw new AppBadException("Email or Password is wrong");
+            throw new AppBadException(resourcesBundleService.getMessage("email.password.wrong", appLanguage));
         }
         if (!optional.get().getStatus().equals(ProfileStatus.ACTIVE)) {
             throw new AppBadException("profile not active");
         }
+
 
         ProfileEntity entity = optional.get();
         ProfileDTO dto = new ProfileDTO();
         dto.setName(entity.getName());
         dto.setSurname(entity.getSurname());
         dto.setRole(entity.getRole());
-        dto.setJwt(JWTUtil.encode(entity.getId(), entity.getRole()));
-
+        dto.setJwt(JWTUtil.encode(entity.getEmail(), entity.getRole()));
         return dto;
     }
 
@@ -70,7 +70,7 @@ public class AuthService {
         if (dto.getName().length() < 2 || dto.getSurname().length() < 2) {
             throw new AppBadException("name or surname is wrong");
         }
-        if (dto.getPhone().length()!=13){
+        if (dto.getPhone().length() != 13) {
             throw new AppBadException("phone number is wrong");
         }
         // check
@@ -87,18 +87,17 @@ public class AuthService {
 //            } else {
 //                throw new AppBadException("Email exists");
 //            }
-     //   }
-         Optional<ProfileEntity> optionalPhone = profileRepository.findByPhone(dto.getPhone());
-        if (optionalPhone.isPresent()){
-            if (optionalPhone.get().getStatus().equals(ProfileStatus.REGISTRATION)){
+        //   }
+        Optional<ProfileEntity> optionalPhone = profileRepository.findByPhone(dto.getPhone());
+        if (optionalPhone.isPresent()) {
+            if (optionalPhone.get().getStatus().equals(ProfileStatus.REGISTRATION)) {
                 LocalDateTime from = LocalDateTime.now().minusMinutes(1);
                 LocalDateTime to = LocalDateTime.now();
                 if (smsHistoryRepository.countSendPhone(dto.getPhone(), from, to) >= 2) {
                     throw new AppBadException("To many attempt. Please try after 1 minute.");
                 }
                 sendSms(dto);
-            }
-            else {
+            } else {
                 throw new AppBadException("phone exists");
             }
         }
@@ -111,21 +110,20 @@ public class AuthService {
         entity.setPhone(dto.getPhone());
         entity.setPassword(MDUtil.encode(dto.getPassword()));
         entity.setStatus(ProfileStatus.REGISTRATION);
-        entity.setRole(ProfileRole.USER);
+        entity.setRole(ProfileRole.ROLE_USER);
         profileRepository.save(entity);
         //send verification code (email/sms)
 
         //sms history
         sendSms(dto);
         //gmail
-      //  sendEmailMessage(dto, entity);
-         return true;
+        //  sendEmailMessage(dto, entity);
+        return true;
     }
 
     private void sendSms(RegistrationDTO dto) {
         String code = RandomUtil.getRandomSmsCode();
-        smsServerService.send(dto.getPhone(),"Tasdiqlash kodi: \n", code);
-
+        smsServerService.send(dto.getPhone(), "Tasdiqlash kodi: \n", code);
 
 
         SmsHistoryEntity smsHistoryEntity = new SmsHistoryEntity();
@@ -137,8 +135,8 @@ public class AuthService {
     }
 
     private void sendEmailMessage(RegistrationDTO dto, ProfileEntity entity) {
-         String jwt = JWTUtil.encodeForEmail(entity.getId());
-         text = "<h1 style=\"text-align: center\">Hello %s</h1>\n" +
+        String jwt = JWTUtil.encodeForEmail(entity.getId());
+        text = "<h1 style=\"text-align: center\">Hello %s</h1>\n" +
                 "<p style=\"background-color: indianred; color: white; padding: 30px\">To complete registration please link to the following link</p>\n" +
                 "<a style=\" background-color: #f44336;\n" +
                 "  color: white;\n" +
@@ -159,8 +157,6 @@ public class AuthService {
         emailSendHistoryService.saveEmailHistory(emailSendHistoryDTO);
 
     }
-
-
 
 
     public String emailVerification(String jwt) {
@@ -190,6 +186,7 @@ public class AuthService {
         }
         return "success";
     }
+
     public String smsVerification(String code) {
         try {
             Optional<SmsHistoryEntity> optional = smsHistoryRepository.findByMessage(code);
@@ -202,7 +199,7 @@ public class AuthService {
             }
             int effectRows = profileRepository.updateStatus(entity.get().getId(), ProfileStatus.ACTIVE);
             if (effectRows == 1) {
-                smsHistoryRepository.updateStatus(optional.get().getId(),SmsStatus.USED,LocalDateTime.now());
+                smsHistoryRepository.updateStatus(optional.get().getId(), SmsStatus.USED, LocalDateTime.now());
             }
 
         } catch (JwtException e) {
@@ -215,38 +212,38 @@ public class AuthService {
 
     public String resentEmail(String email) {
         Optional<ProfileEntity> optional = profileRepository.findByEmail(email);
-        if (optional.isEmpty()){
+        if (optional.isEmpty()) {
             throw new AppBadException("You are not registered. Please register first! ");
         }
-        if (!optional.get().getStatus().equals(ProfileStatus.ACTIVE)){
+        if (!optional.get().getStatus().equals(ProfileStatus.ACTIVE)) {
             throw new AppBadException("you are not allowed");
         }
-            LocalDateTime from = LocalDateTime.now().minusMinutes(1);
-            LocalDateTime to = LocalDateTime.now();
-            if (emailSendHistoryRepository.countSendEmail(email, from, to) >= 3) {
-                throw new AppBadException("To many attempt. Please try after 1 minute.");
-            }
-
-            String code = RandomUtil.getRandomSmsCode();
-            boolean isSend = mailSender.sendEmail(email, "Resent password", "Please do not give the code to anyone! \n" + code);
-            if (!isSend) {
-                return "error";
-            }
-            EmailSendHistoryDTO emailSendHistoryDTO = new EmailSendHistoryDTO();
-            emailSendHistoryDTO.setMessage(code);
-            emailSendHistoryDTO.setEmail(email);
-            emailSendHistoryDTO.setProfile(optional.get());
-            emailSendHistoryDTO.setStatus(optional.get().getStatus());
-            emailSendHistoryService.saveEmailHistory(emailSendHistoryDTO);
-            return "Success";
+        LocalDateTime from = LocalDateTime.now().minusMinutes(1);
+        LocalDateTime to = LocalDateTime.now();
+        if (emailSendHistoryRepository.countSendEmail(email, from, to) >= 3) {
+            throw new AppBadException("To many attempt. Please try after 1 minute.");
         }
+
+        String code = RandomUtil.getRandomSmsCode();
+        boolean isSend = mailSender.sendEmail(email, "Resent password", "Please do not give the code to anyone! \n" + code);
+        if (!isSend) {
+            return "error";
+        }
+        EmailSendHistoryDTO emailSendHistoryDTO = new EmailSendHistoryDTO();
+        emailSendHistoryDTO.setMessage(code);
+        emailSendHistoryDTO.setEmail(email);
+        emailSendHistoryDTO.setProfile(optional.get());
+        emailSendHistoryDTO.setStatus(optional.get().getStatus());
+        emailSendHistoryService.saveEmailHistory(emailSendHistoryDTO);
+        return "Success";
+    }
 
     public String resentPhone(String phone) {
         Optional<ProfileEntity> optional = profileRepository.findByPhone(phone);
-        if (optional.isEmpty()){
+        if (optional.isEmpty()) {
             throw new AppBadException("You are not registered. Please register first! ");
         }
-        if (!optional.get().getStatus().equals(ProfileStatus.ACTIVE)){
+        if (!optional.get().getStatus().equals(ProfileStatus.ACTIVE)) {
             throw new AppBadException("you are not allowed");
         }
         LocalDateTime from = LocalDateTime.now().minusMinutes(1);

@@ -17,15 +17,15 @@ public class CommentLikeEntity {
     @Column(name = "profile_id")
     private Integer profileId;
     @ManyToOne
-    @JoinColumn(name = "profile_id")
+    @JoinColumn(name = "profile_id",insertable = false,updatable = false)
     private ProfileEntity profile;
 
     @Column(name = "comment_id")
     private Integer commentId;
     @ManyToOne
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "comment_id",insertable = false,updatable = false)
     private CommentEntity comment;
-    @Column(name = "comment_id")
+    @Column(name = "createdDate")
     private LocalDateTime createdDate;
     @Column(name = "status")
     private LikeStatus status;

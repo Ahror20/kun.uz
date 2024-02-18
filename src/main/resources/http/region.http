@@ -1,10 +1,10 @@
 ### Create
 POST localhost:8080/region/adm
 Content-Type: application/json
-Authorization: Basic dXNlcjo0N2ZlZjRiMi04ZGI3LTQwZjQtOTk5Yi1lODU2ZDE4OWM3ODY=
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc4MzgwNzYsImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzA3OTI0NDc2LCJpc3MiOiJLdW5VelRlc3QifQ.0OBzgIu7W5dTSq-7U5d7vtKdkpqEhx7bEMyQGNMdD94NLMVRPqkb20v7nEqAOTn3Pxf9va1DfHdExZRwgsWH_w
 
 {
-  "order_number": 4,
+  "order_number": 10,
   "nameUz": "Buxoro uz",
   "nameEn": "Buxoro eng",
   "nameRu": "Buxoro ru"

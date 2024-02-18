@@ -1,0 +1,76 @@
+
+
+-- CREATE TABLE article2 (
+--     id VARCHAR(255) PRIMARY KEY,
+--     title VARCHAR(255),
+--     description VARCHAR(255),
+--     like_count BIGINT DEFAULT 0,
+--     dislike_count BIGINT DEFAULT 0
+-- );
+
+-- insert into article2 (id,title,description,like_count,dislike_count) values (uuid_generate_v4(),'dasdasd','asdada',0,0);
+
+-- select public.uuid_generate_v4()
+-- drop table article_like;
+
+-- CREATE TABLE article_like (
+--     id VARCHAR(255) PRIMARY KEY,
+--     profile_id int,
+--     article_id VARCHAR(255),
+--     status VARCHAR,
+--     created_date timestamp,
+-- 	constraint profile_id_fk foreign key (profile_id)  references profile(id),
+-- 	constraint article_id_fk foreign key (article_id)  references article2(id)
+-- );
+
+insert into article_like (id,profile_id,article_id,status,created_date)
+   values (uuid_generate_v4(),1,'8b49aa8b-2c22-4968-ae3a-9ec5159a7c35','DIS_LIKE',now())
+
+update article_like set status = 'LIKE' where profile_id = 1 and article_id = '8b49aa8b-2c22-4968-ae3a-9ec5159a7c35'
+delete from article_like where profile_id = 1 and article_id = '8b49aa8b-2c22-4968-ae3a-9ec5159a7c35'
+-- update article2 set like_count = 0, dislike_count  =0;
+-- delete from  article_like;
+select * from article_like;
+select * from article2;
+select * from article_like;
+
+
+CREATE OR REPLACE FUNCTION article_like_trigger_function()
+RETURNS TRIGGER
+LANGUAGE PLPGSQL
+AS $$
+BEGIN
+--NEW OLD
+    IF TG_OP = 'INSERT' then
+		IF NEW.status = 'LIKE' then
+			update article2 set like_count = like_count + 1 where id = NEW.article_id;
+		elseif NEW.STATUS = 'DIS_LIKE' then
+			update article2 set dislike_count = dislike_count + 1 where id = NEW.article_id;
+		end if;
+	ELSEIF TG_OP = 'UPDATE'then
+		 IF NEW.status = 'LIKE' and OLD.status = 'DIS_LIKE' then
+		 	update article2 set like_count = like_count + 1, dislike_count = dislike_count - 1  where id = NEW.article_id;
+	    elseif NEW.STATUS = 'DIS_LIKE' and OLD.status = 'LIKE' then
+			update article2 set like_count = like_count - 1, dislike_count = dislike_count + 1  where id = NEW.article_id;
+		end if;
+	ELSEIF TG_OP = 'DELETE' then
+		 IF OLD.status = 'LIKE' then
+		 	update article2 set like_count = like_count - 1 where id = OLD.article_id;
+	    elseif OLD.STATUS = 'DIS_LIKE' then
+			update article2 set dislike_count = dislike_count - 1  where id = OLD.article_id;
+		end if;
+		return OLD;
+	end if;
+	return NEW;
+END; $$
+
+-- remove insert
+
+-- update
+
+
+CREATE or REPLACE TRIGGER article_like_trigger
+	BEFORE INSERT OR UPDATE OR DELETE
+	ON article_like
+	FOR EACH ROW
+	EXECUTE PROCEDURE article_like_trigger_function();

@@ -69,6 +69,10 @@ public class ArticleEntity {
     private Boolean visible = true;
     @Column(name = "view_count")
     private Integer viewCount;
+    @Column(name = "like_count")
+    private Integer likeCount;
+    @Column(name = "dislike_count")
+    private Integer dislikeCount;
 
 
 

@@ -4,9 +4,11 @@ import com.example.dto.ArticleLikeDTO;
 import com.example.dto.CreateArticleLikeDTO;
 import com.example.service.ArticleLikeService;
 import com.example.util.HttpRequestUtil;
+import com.example.util.SpringSecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,15 +18,15 @@ public class ArticleLikeController {
     private ArticleLikeService articleLikeService;
 
     @PostMapping("/like")
-    public ResponseEntity<ArticleLikeDTO> like(@RequestBody CreateArticleLikeDTO dto,
-                                               HttpServletRequest request){
-        Integer profileId = HttpRequestUtil.getProfileId(request);
+    @PreAuthorize(value = "hasAnyRole('MODERATOR')")
+    public ResponseEntity<ArticleLikeDTO> like(@RequestBody CreateArticleLikeDTO dto){
+        Integer profileId = SpringSecurityUtil.getCurrentUser().getId();
         return ResponseEntity.ok(articleLikeService.like(dto,profileId));
     }
     @PostMapping("/dislike")
-    public ResponseEntity<ArticleLikeDTO> dislike(@RequestBody CreateArticleLikeDTO dto,
-                                                  HttpServletRequest request){
-        Integer profileId = HttpRequestUtil.getProfileId(request);
+    @PreAuthorize(value = "hasAnyRole('MODERATOR')")
+    public ResponseEntity<ArticleLikeDTO> dislike(@RequestBody CreateArticleLikeDTO dto){
+        Integer profileId = SpringSecurityUtil.getCurrentUser().getId();
         return ResponseEntity.ok(articleLikeService.dislike(dto,profileId));
     }
 

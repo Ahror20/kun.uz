@@ -1,16 +1,16 @@
 ### Create
 POST localhost:8080/article/moderator
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDczOTg3MjMsImlkIjo2NCwicm9sZSI6Ik1PREVSQVRPUiIsImV4cCI6MTcwNzQ4NTEyMywiaXNzIjoiS3VuVXpUZXN0In0.s2ARpRtbICJiElwrRseiUvuU2VbDoyFaEpWxmSZP6MqkwmGoAwQ80gK7CHCpwgaegDZZmLRX0OZvs4TyaReQ0A
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDgxNTE3NTksImVtYWlsIjoiYWRtaW5jZWVrQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX01PREVSQVRPUiIsImV4cCI6MTcwODIzODE1OSwiaXNzIjoiS3VuVXpUZXN0In0.49Rsyp4kMoi0WnpK6tR1AljgXtpWqNQH8IeC0WNa0kbmDRWGf-P3BxELzbI3z7fxoD175RNYDdwxbfHhZs19iw
 
 {
-  "title": "Osiya chempionati",
+  "title": "Test 1",
   "description": "O`zbekiston vs Qatar o`yini",
   "content": "bugun O`zbekiston yeb quydi.Shu munosabat bila hammani tabrikliman",
   "regionId": 1,
   "categoryId": 1,
-  "articleType": [1,2],
-  "photoId": "54baef48-81dd-46d3-bf2c-dc8fc10565ba"
+  "articleType": [1,2,3],
+  "photoId": "bd2d33cb-2ff1-4942-96e8-657a030eb804"
 }
 ### delete
 DELETE localhost:8080/article/moderator/5425443c-dadb-4593-b310-0b962bb8ba36
@@ -45,6 +45,23 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc1OTA2NDksImlkIjo2NCwic
 
 ### get article by types limit 5
 GET localhost:8080/article/getLast5ArticleByTypes/2?limit=2
+
+### Get Last 8  Articles witch id not included in given list
+POST localhost:8080/article/getLast8ArticlesIdNotInclude
+Content-Type: application/json
+
+["594d1096-a539-4853-a7d0-05ae1e92b9c1","ab64c4c1-912d-4fa2-942b-d157c7147993"]
+
+### Get Last 4 Article By Types and except given article id.
+POST localhost:8080/article/getLast4ArticleByTypes/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDgxNjQxMjAsImVtYWlsIjoiYWRtaW5jZWVrQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX01PREVSQVRPUiIsImV4cCI6MTcwODI1MDUyMCwiaXNzIjoiS3VuVXpUZXN0In0.WYoFa7AQdqEze_-2trfFwZSU0xJYuAeEUHi-oLEt7Cw99bCceSqzHKmMI9MvVllhPod_uFl6xoXKDouCzUOInA
+
+["71003006-ed24-4a26-90c5-f96297600ff0","594d1096-a539-4853-a7d0-05ae1e92b9c1"]
+
+### Get 4 most read article
+GET localhost:8080/article/get4MostReadArticles
+
 
 
 

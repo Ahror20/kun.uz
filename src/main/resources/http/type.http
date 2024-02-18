@@ -1,12 +1,13 @@
 ### Create
 POST localhost:8080/type/adm
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDgxNTE0NTksImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzA4MjM3ODU5LCJpc3MiOiJLdW5VelRlc3QifQ.DrFaD0G4q3peO8woq_aPpAzraNYbhBJkE70z5scLjrnOoPTdSZG07muTHG2gfEi9vez6Ph5Gd1tBxPjjmyPdOQ
 
 {
-  "order_number": 8,
-  "nameUz": "test uz",
-  "nameRu": "test ru",
-  "nameEn": "test eng"
+  "order_number": 9,
+  "nameUz": "test3 uz",
+  "nameRu": "test3 ru",
+  "nameEn": "test3 eng"
 }
 
 ### Update

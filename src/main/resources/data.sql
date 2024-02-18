@@ -1,0 +1,1 @@
+-- Alter table profile drop column age;

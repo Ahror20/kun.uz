@@ -6,6 +6,7 @@ import com.example.service.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class TypeController {
     private TypeService typeService;
 
     @PostMapping("/adm")
+    @PreAuthorize(value = "hasRole('ADMIN')")
     public ResponseEntity<TypeDTO> create(@RequestBody TypeDTO dto) {
         return ResponseEntity.ok(typeService.create(dto));
     }

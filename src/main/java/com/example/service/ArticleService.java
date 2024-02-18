@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.*;
 import com.example.entity.ArticleEntity;
 import com.example.entity.ArticleTypeEntity;
+import com.example.enums.AppLanguage;
 import com.example.enums.ArticleStatus;
 import com.example.exp.AppBadException;
 import com.example.repository.*;
@@ -30,6 +31,8 @@ public class ArticleService {
     private ArticleTypeService articleTypeService;
     @Autowired
     private ArticleTypeRepository articleTypeRepository;
+    @Autowired
+    private ResourcesBundleService resourcesBundleService;
 
     public ArticleDTO create(CreateArticleDTO dto, Integer profileId) {
         ArticleEntity entity = new ArticleEntity();
@@ -42,6 +45,8 @@ public class ArticleService {
         entity.setPhotoID(dto.getPhotoId());
         entity.setViewCount(0);
         entity.setSharedCount(0);
+        entity.setLikeCount(0);
+        entity.setDislikeCount(0);
         entity.setModeratorId(profileId);
         articleRepository.save(entity);
 
@@ -129,5 +134,43 @@ public class ArticleService {
         dto.setDescription(entity.getDescription());
         dto.setPublishedDate(entity.getPublishedDate());
         return dto;
+    }
+
+    public List<ArticleShortInfoDTO> getLastGetLast8Articles(String[] ids) {
+        List<ArticleEntity> getAll = (List<ArticleEntity>) articleRepository.findAll();
+         if (getAll.isEmpty()){
+             throw new AppBadException(resourcesBundleService.getMessage("article.not.found", AppLanguage.en));
+         }
+
+
+        List<ArticleEntity> list = articleRepository.get8Article(ids);
+         List<ArticleShortInfoDTO> dtoList = new ArrayList<>();
+         for (ArticleEntity entity:list){
+             dtoList.add(shortInfoDTO(entity));
+         }
+         return dtoList;
+    }
+
+    public List<ArticleShortInfoDTO> getLast4ArticleByTypes(Integer typeId, String[] id) {
+        List<ArticleEntity> list =articleRepository.getLastArticle4ArticleByTypes(typeId,id);
+        List<ArticleShortInfoDTO> dtoList = new ArrayList<>();
+        for (ArticleEntity entity:list){
+            dtoList.add(shortInfoDTO(entity));
+        }
+        return dtoList;
+    }
+
+    public List<ArticleShortInfoDTO> get4MostReadArticles() {
+        List<ArticleEntity> articleEntities = articleRepository.get4MostReadArticles();
+        if (articleEntities.isEmpty()){
+            throw new AppBadException(resourcesBundleService.getMessage("article.not.found",AppLanguage.en));
+        }
+
+        List<ArticleShortInfoDTO> dtoList = new ArrayList<>();
+
+        for (ArticleEntity entity: articleEntities){
+            dtoList.add(shortInfoDTO(entity));
+        }
+        return dtoList;
     }
 }

@@ -1,11 +1,12 @@
 ### create
 POST localhost:8080/comment/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MTcwNTQsImlkIjo2NCwicm9sZSI6IlBVQkxJU0hFUiIsImV4cCI6MTcwNzgwMzQ1NCwiaXNzIjoiS3VuVXpUZXN0In0.CajTn4tcbldyH48USYaa6jRW4lSxB9RF3WMIcWX3pc_r2A30E_MARRi3KWCY29DEjlaSPN7iNERC35UOy_1vqg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc5MTQxODIsImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzA4MDAwNTgyLCJpc3MiOiJLdW5VelRlc3QifQ.wEYc7HVkIXMJzsF6p6PXd3H15dnsX8VPgqHEVSOjBPtS-8kRPYcaEAnFACmFav5AzlwpV7kaRa5yqVjNT-BTtQ
 
 {
-  "content": "afkfakdafsfasfsa",
-  "articleId": "ddd19677-cdd7-411d-81e4-69033425b3a7"
+  "content": "test  fbhbhjfsabbafs",
+  "articleId": "ddd19677-cdd7-411d-81e4-69033425b3a7",
+  "replyId": 3
 }
 
 ### update
@@ -28,13 +29,18 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MTcwNTQsImlkIjo2NCwic
 
 ### pagaination
 GET localhost:8080/comment/pagination
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MzE4MjEsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3ODE4MjIxLCJpc3MiOiJLdW5VelRlc3QifQ.FP7rkTbSbDrJcM-nHt1kJMXQivZZ9QLtYc72L0SP-F_kAcIUIU9TZxDs2GlHuN-2nb30ByjBxZpp0dCf3gqJxQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc5MTQxODIsImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzA4MDAwNTgyLCJpc3MiOiJLdW5VelRlc3QifQ.wEYc7HVkIXMJzsF6p6PXd3H15dnsX8VPgqHEVSOjBPtS-8kRPYcaEAnFACmFav5AzlwpV7kaRa5yqVjNT-BTtQ
 
 ### filter
 POST localhost:8080/comment/filter
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc3MzcyNzgsImlkIjo2Miwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzA3ODIzNjc4LCJpc3MiOiJLdW5VelRlc3QifQ.r-xIR0OzzksrlXNhoOlYLuqEjbfGaKLpil4xETGw15exLJgTGYNv-pwKxcigrnyV5zxTfmb5J8T5aPlbqF5LJA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc5MTQxODIsImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzA4MDAwNTgyLCJpc3MiOiJLdW5VelRlc3QifQ.wEYc7HVkIXMJzsF6p6PXd3H15dnsX8VPgqHEVSOjBPtS-8kRPYcaEAnFACmFav5AzlwpV7kaRa5yqVjNT-BTtQ
 
 {
-  "profileId": 64
+  "profileId": 62
 }
+
+### Get replied list
+GET localhost:8080/comment/getRepliedList/3
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDc5MTQxODIsImVtYWlsIjoiYWRtaW5AbWFpbC5ydSIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzA4MDAwNTgyLCJpc3MiOiJLdW5VelRlc3QifQ.wEYc7HVkIXMJzsF6p6PXd3H15dnsX8VPgqHEVSOjBPtS-8kRPYcaEAnFACmFav5AzlwpV7kaRa5yqVjNT-BTtQ
+

@@ -1,10 +1,12 @@
 ### Login admin
 POST localhost:8080/auth/login
 Content-Type: application/json
+Accept-Language: ru
+
 
 {
-  "email": "admin@mail.ru",
-  "password": "12345"
+  "email": "adminceek@gmail.com",
+  "password": "1234"
 }
 
 ### registration
