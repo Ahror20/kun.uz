@@ -47,7 +47,8 @@ public class SpringSecurityConfig {
             "/region/byLang",
             "/attach/*",
             "/article/getLast8ArticlesIdNotInclude",
-            "/article/get4MostReadArticles"
+            "/article/get4MostReadArticles",
+            "/article/**"
     };
 
     @Bean

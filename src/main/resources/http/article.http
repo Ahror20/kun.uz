@@ -62,6 +62,24 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDgxNjQxMjAsImVtYWlsIjoiY
 ### Get 4 most read article
 GET localhost:8080/article/get4MostReadArticles
 
+### Get Last 5 Article By Types And By RegionKey
+GET localhost:8080/article/getLast5ArticleByTypesAndByRegionKey?typeId=1&regionId=1
+
+### Get article by region key paging
+GET localhost:8080/article/getArticleListByRegionKeyPagination/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE3MDgyNjkyOTgsImVtYWlsIjoiYWRtaW5jZWVrQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX01PREVSQVRPUiIsImV4cCI6MTcwODM1NTY5OCwiaXNzIjoiS3VuVXpUZXN0In0.8v2hMKjyddku7cfChLXvbbTWwDzhNAkmeCHBnrlBSzPcC9OaAY7_Sp0va8QzsBaU3J_8hcNfLq53kPob_o56MQ
+
+### increase view count
+GET localhost:8080/article/increaseArticleViewCountByArticleId/71003006-ed24-4a26-90c5-f96297600ff0
+
+### filter
+POST localhost:8080/article/filter
+Content-Type: application/json
+
+{
+  "id": "dc9b6c88-0cb3-41f8-8e99-f351355f4192"
+}
+
 
 
 
